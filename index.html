@@ -23,8 +23,10 @@
                     <a href="#cases" data-i18n="cases">成功案例</a>
                     <a href="#resources" data-i18n="resources">资源中心</a>
                     <a href="#about" data-i18n="about">关于我们</a>
-                    <a href="register.html" style="color: #3b82f6;" data-i18n="register">注册会员</a>
-                    <a href="login.html" style="color: #10b981;" data-i18n="login">登录</a>
+                    <span id="navAuth">
+                        <a href="register.html" style="color: #3b82f6;" data-i18n="register">注册会员</a>
+                        <a href="login.html" style="color: #10b981;" data-i18n="login">登录</a>
+                    </span>
                 </nav>
                 <div class="header-actions">
                     <div class="lang-switch">
@@ -738,7 +740,19 @@
         document.addEventListener('DOMContentLoaded', function() {
             applyTranslations();
             updateLangButtons();
+            updateNavAuth();
         });
+        
+        // 更新导航栏登录状态
+        function updateNavAuth() {
+            const loggedIn = localStorage.getItem('tradeweb_logged_in');
+            const currentUser = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
+            const navAuth = document.getElementById('navAuth');
+            
+            if (loggedIn && currentUser.name) {
+                navAuth.innerHTML = '<a href="member.html" style="color: #3b82f6;"><i class="fas fa-user-circle"></i> ' + currentUser.name + '</a>';
+            }
+        }
     </script>
 </body>
 </html>
