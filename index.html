@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalTrade Pro - 外贸全链路拓客专家</title>
+    <meta name="description" content="专业外贸拓客服务：LinkedIn精准获客、海关数据洞察、邮件营销自动化">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="#" class="logo">
+                    <span class="logo-icon"><i class="fas fa-globe-asia"></i></span>
+                    <span class="logo-text">GlobalTrade<span class="logo-accent">Pro</span></span>
+                </a>
+                <nav class="nav">
+                    <a href="#services">服务项目</a>
+                    <a href="#solutions">解决方案</a>
+                    <a href="#cases">成功案例</a>
+                    <a href="#resources">资源中心</a>
+                    <a href="#about">关于我们</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="lang-switch">
+                        <a href="#" class="active">中文</a>
+                        <span>|</span>
+                        <a href="#">EN</a>
+                    </div>
+                    <a href="#contact" class="btn btn-primary">免费咨询</a>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#services" onclick="toggleMobileMenu()">服务项目</a>
+        <a href="#solutions" onclick="toggleMobileMenu()">解决方案</a>
+        <a href="#cases" onclick="toggleMobileMenu()">成功案例</a>
+        <a href="#resources" onclick="toggleMobileMenu()">资源中心</a>
+        <a href="#about" onclick="toggleMobileMenu()">关于我们</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="btn btn-primary btn-block">免费咨询</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span> 已服务 <strong>500+</strong> 外贸企业
+                </div>
+                <h1 class="hero-title">
+                    外贸获客不再难<br>
+                    <span class="highlight">全链路拓客解决方案</span>
+                </h1>
+                <p class="hero-desc">
+                    LinkedIn精准获客 · 海关数据洞察 · 邮件营销自动化 · 展会代运营<br>
+                    帮助外贸企业低成本获取高质量询盘，月均提升300%有效客户
+                </p>
+                <div class="hero-actions">
+                    <a href="#contact" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> 免费获取方案
+                    </a>
+                    <a href="#cases" class="btn btn-outline btn-lg">
+                        <i class="fas fa-play"></i> 查看案例
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10,000+</span>
+                        <span class="stat-label">每月询盘</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">覆盖国家</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">客户满意度</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">300%</span>
+                        <span class="stat-label">平均业绩提升</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-mockup">
+                    <div class="dashboard-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="chart-area">
+                            <div class="chart-title">月度询盘趋势</div>
+                            <div class="chart-bars">
+                                <div class="bar" style="height: 40%"></div>
+                                <div class="bar" style="height: 55%"></div>
+                                <div class="bar" style="height: 45%"></div>
+                                <div class="bar" style="height: 70%"></div>
+                                <div class="bar" style="height: 65%"></div>
+                                <div class="bar" style="height: 80%"></div>
+                                <div class="bar active" style="height: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="metrics-row">
+                            <div class="metric">
+                                <span class="metric-num">1,247</span>
+                                <span class="metric-label">新增询盘</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-num">89%</span>
+                                <span class="metric-label">转化率</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="partners">
+        <div class="container">
+            <p class="partners-label">服务超过500家知名企业</p>
+            <div class="partners-grid">
+                <div class="partner-logo"><i class="fab fa-aws"></i> AWS</div>
+                <div class="partner-logo"><i class="fab fa-google"></i> Google</div>
+                <div class="partner-logo"><i class="fab fa-linkedin"></i> LinkedIn</div>
+                <div class="partner-logo"><i class="fab fa-alipay"></i> 阿里巴巴</div>
+                <div class="partner-logo"><i class="fab fa-tencent"></i> 腾讯</div>
+                <div class="partner-logo"><i class="fas fa-cloud"></i> 华为云</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">我们的服务</span>
+                <h2 class="section-title">全方位外贸拓客解决方案</h2>
+                <p class="section-desc">从市场调研到成交转化，我们提供全链路服务，让获客变得简单高效</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fab fa-linkedin"></i></div>
+                    <h3>LinkedIn精准获客</h3>
+                    <ul>
+                        <li>目标客户画像定位</li>
+                        <li>自动化搜索与添加</li>
+                        <li>个性化营销内容</li>
+                        <li>销售线索自动跟进</li>
+                    </ul>
+                    <a href="#contact" class="service-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-database"></i></div>
+                    <h3>海关数据洞察</h3>
+                    <ul>
+                        <li>全球海关数据查询</li>
+                        <li>采购商精准识别</li>
+                        <li>竞争对手监控</li>
+                        <li>市场趋势分析</li>
+                    </ul>
+                    <a href="#contact" class="service-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-envelope-open-text"></i></div>
+                    <h3>邮件营销自动化</h3>
+                    <ul>
+                        <li>EDM模板设计</li>
+                        <li>自动化工作流</li>
+                        <li>打开率追踪优化</li>
+                        <li>客户分群管理</li>
+                    </ul>
+                    <a href="#contact" class="service-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-store"></i></div>
+                    <h3>阿里国际站代运营</h3>
+                    <ul>
+                        <li>店铺装修与优化</li>
+                        <li>产品排名提升</li>
+                        <li>询盘转化优化</li>
+                        <li>数据运营分析</li>
+                    </ul>
+                    <a href="#contact" class="service-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>展会服务</h3>
+                    <ul>
+                        <li>展会策划与执行</li>
+                        <li>展位设计与搭建</li>
+                        <li>展前邀约买家</li>
+                        <li>展后线索跟进</li>
+                    </ul>
+                    <a href="#contact" class="service-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>营销咨询培训</h3>
+                    <ul>
+                        <li>定制营销策略</li>
+                        <li>团队技能培训</li>
+                        <li>行业报告分析</li>
+                        <li>长期顾问服务</li>
+                    </ul>
+                    <a href="#contact" class="service-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solutions" id="solutions">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">行业解决方案</span>
+                <h2 class="section-title">针对不同行业与市场</h2>
+                <p class="section-desc">深耕多个行业，定制化方案让获客更精准</p>
+            </div>
+            <div class="solutions-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="industry">按行业</button>
+                    <button class="tab-btn" data-tab="market">按市场</button>
+                    <button class="tab-btn" data-tab="scale">按规模</button>
+                </div>
+                <div class="tab-content active" id="industry">
+                    <div class="solutions-grid">
+                        <div class="solution-card">
+                            <div class="solution-icon"><i class="fas fa-cogs"></i></div>
+                            <h4>机械制造</h4>
+                            <p>机械设备、工业零件、工具模具等</p>
+                            <ul><li>目标采购商定位</li><li>技术参数匹配</li><li>展会数字化获客</li></ul>
+                        </div>
+                        <div class="solution-card">
+                            <div class="solution-icon"><i class="fas fa-microchip"></i></div>
+                            <h4>电子数码</h4>
+                            <p>消费电子、智能硬件、元器件等</p>
+                            <ul><li>电商平台运营</li><li>新品发布推广</li><li>跨境电商渠道</li></ul>
+                        </div>
+                        <div class="solution-card">
+                            <div class="solution-icon"><i class="fas fa-tshirt"></i></div>
+                            <h4>纺织服装</h4>
+                            <p>服装面料、辅料、成衣等</p>
+                            <ul><li>快反供应链对接</li><li>时尚趋势分析</li><li>品牌出海方案</li></ul>
+                        </div>
+                        <div class="solution-card">
+                            <div class="solution-icon"><i class="fas fa-industry"></i></div>
+                            <h4>建材家居</h4>
+                            <p>建材、家居用品、装饰材料等</p>
+                            <ul><li>B2B平台优化</li><li>工程渠道开拓</li><li>设计师资源对接</li></ul>
+                        </div>
+                        <div class="solution-card">
+                            <div class="solution-icon"><i class="fas fa-flask"></i></div>
+                            <h4>化工医药</h4>
+                            <p>化工原料、医药中间体等</p>
+                            <ul><li>合规资质认证</li><li>专业采购商库</li><li>技术交流平台</li></ul>
+                        </div>
+                        <div class="solution-card">
+                            <div class="solution-icon"><i class="fas fa-boxes"></i></div>
+                            <h4>食品农业</h4>
+                            <p>食品配料、农产品等</p>
+                            <ul><li>食品安全合规</li><li>渠道商对接</li><li>跨境电商入局</li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="market">
+                    <div class="solutions-grid">
+                        <div class="solution-card"><div class="solution-icon"><i class="fas fa-flag-usa"></i></div><h4>北美市场</h4><p>美国、加拿大、墨西哥</p><ul><li>LinkedIn为主</li><li>亚马逊平台</li><li>行业展会</li></ul></div>
+                        <div class="solution-card"><div class="solution-icon"><i class="fas fa-flag-eu"></i></div><h4>欧洲市场</h4><p>德、法、英、意等国家</p><ul><li>海关数据分析</li><li>本地化内容</li><li>B2B平台</li></ul></div>
+                        <div class="solution-card"><div class="solution-icon"><i class="fas fa-yen-sign"></i></div><h4>日韩市场</h4><p>日本、韩国</p><ul><li>贸易平台对接</li><li>展会服务</li><li>商务考察</li></ul></div>
+                        <div class="solution-card"><div class="solution-icon"><i class="fas fa-map-marker-alt"></i></div><h4>东南亚</h4><p>印尼、越南、泰国等</p><ul><li>电商平台布局</li><li>本地分销商</li><li>跨境电商</li></ul></div>
+                        <div class="solution-card"><div class="solution-icon"><i class="fas fa-gem"></i></div><h4>中东非洲</h4><p>阿联酋、南非等国家</p><ul><li>展会服务</li><li>政府项目对接</li><li>分销商网络</li></ul></div>
+                        <div class="solution-card"><div class="solution-icon"><i class="fas fa-comments"></i></div><h4>南美市场</h4><p>巴西、阿根廷等国家</p><ul><li>本地化支持</li><li>展会服务</li><li>渠道开拓</li></ul></div>
+                    </div>
+                </div>
+                <div class="tab-content" id="scale">
+                    <div class="solutions-grid solutions-scale">
+                        <div class="solution-card scale-card">
+                            <div class="scale-badge">初创</div>
+                            <h4>小微企业</h4>
+                            <p>0-50人，年出口额小于500万</p>
+                            <ul><li>低成本获客方案</li><li>标准化服务套餐</li><li>阿里国际站基础运营</li><li>LinkedIn免费获客</li></ul>
+                            <div class="scale-price">9,800元起/月</div>
+                        </div>
+                        <div class="solution-card scale-card featured">
+                            <div class="scale-badge popular">推荐</div>
+                            <h4>成长型企业</h4>
+                            <p>50-200人，年出口额500万-5000万</p>
+                            <ul><li>全链路营销方案</li><li>多平台运营</li><li>定制化获客策略</li><li>专属客户经理</li></ul>
+                            <div class="scale-price">28,800元起/月</div>
+                        </div>
+                        <div class="solution-card scale-card">
+                            <div class="scale-badge enterprise">企业</div>
+                            <h4>大型企业</h4>
+                            <p>200人以上，年出口额大于5000万</p>
+                            <ul><li>全球化营销战略</li><li>海外团队搭建</li><li>品牌出海全案</li><li>专属服务团队</li></ul>
+                            <div class="scale-price">88,800元起/月</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cases" id="cases">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">成功案例</span>
+                <h2 class="section-title">真实客户，真实效果</h2>
+                <p class="section-desc">已帮助500+外贸企业实现业绩增长</p>
+            </div>
+            <div class="cases-grid">
+                <div class="case-card">
+                    <div class="case-image case-img-1"><div class="case-category">机械设备</div></div>
+                    <div class="case-content">
+                        <h4>某机械出口企业</h4>
+                        <p class="case-desc">通过LinkedIn精准获客+海关数据，月均询盘从50提升到300+</p>
+                        <div class="case-results">
+                            <div class="result"><span class="result-num">500%</span><span class="result-label">询盘增长</span></div>
+                            <div class="result"><span class="result-num">120万</span><span class="result-label">年增订单</span></div>
+                        </div>
+                        <div class="case-quote">
+                            <i class="fas fa-quote-left"></i> "用了GlobalTrade Pro的服务后，我们的海外客户数量翻了5倍!" <cite>— 张总</cite>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-image case-img-2"><div class="case-category">电子数码</div></div>
+                    <div class="case-content">
+                        <h4>某电子科技公司</h4>
+                        <p class="case-desc">阿里国际站代运营+邮件营销，店铺星级从3星提升到5星</p>
+                        <div class="case-results">
+                            <div class="result"><span class="result-num">320%</span><span class="result-label">销售额增长</span></div>
+                            <div class="result"><span class="result-num">85%</span><span class="result-label">询盘转化率</span></div>
+                        </div>
+                        <div class="case-quote">
+                            <i class="fas fa-quote-left"></i> "专业团队帮我们省了很多精力，询盘质量也更高了!" <cite>— 李总</cite>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-image case-img-3"><div class="case-category">纺织服装</div></div>
+                    <div class="case-content">
+                        <h4>某纺织服装企业</h4>
+                        <p class="case-desc">全链路营销服务，从0到建立海外分销网络</p>
+                        <div class="case-results">
+                            <div class="result"><span class="result-num">15国</span><span class="result-label">覆盖国家</span></div>
+                            <div class="result"><span class="result-num">50+</span><span class="result-label">分销商</span></div>
+                        </div>
+                        <div class="case-quote">
+                            <i class="fas fa-quote-left"></i> "帮我们打开了全球市场，建立了完整的分销体系!" <cite>— 王总</cite>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cases-cta">
+                <a href="#contact" class="btn btn-primary">获取定制方案</a>
+                <a href="#" class="btn btn-outline">查看更多案例</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="resources" id="resources">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">资源中心</span>
+                <h2 class="section-title">外贸干货与实战指南</h2>
+                <p class="section-desc">免费获取行业报告、运营技巧、案例分析</p>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div class="resource-content">
+                        <span class="resource-tag">行业报告</span>
+                        <h4>2024全球B2B市场趋势报告</h4>
+                        <p>深度分析北美、欧洲、东南亚市场机遇</p>
+                        <a href="#" class="resource-download"><i class="fas fa-download"></i> 免费下载</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-book"></i></div>
+                    <div class="resource-content">
+                        <span class="resource-tag">操作指南</span>
+                        <h4>LinkedIn获客完整攻略</h4>
+                        <p>从0到1搭建高效获客体系</p>
+                        <a href="#" class="resource-download"><i class="fas fa-download"></i> 免费下载</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-video"></i></div>
+                    <div class="resource-content">
+                        <span class="resource-tag">视频教程</span>
+                        <h4>海关数据使用技巧</h4>
+                        <p>快速找到目标客户的实战方法</p>
+                        <a href="#" class="resource-download"><i class="fas fa-play-circle"></i> 立即观看</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="resource-content">
+                        <span class="resource-tag">模板工具</span>
+                        <h4>外贸邮件模板大全</h4>
+                        <p>100+高回复率邮件模板</p>
+                        <a href="#" class="resource-download"><i class="fas fa-download"></i> 免费获取</a>
+                    </div>
+                </div>
+            </div>
+            <div class="newsletter">
+                <div class="newsletter-content">
+                    <h3><i class="fas fa-paper-plane"></i> 订阅外贸资讯</h3>
+                    <p>每周更新：获客技巧、行业动态、政策解读</p>
+                </div>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="输入您的邮箱">
+                    <button type="submit" class="btn btn-primary">立即订阅</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <div class="container">
+            <div class="why-us-grid">
+                <div class="why-us-content">
+                    <span class="section-tag">为什么选择我们</span>
+                    <h2 class="section-title">更懂外贸，更懂获客</h2>
+                    <div class="why-us-list">
+                        <div class="why-item">
+                            <div class="why-icon"><i class="fas fa-bullseye"></i></div>
+                            <div class="why-text"><h4>精准定位</h4><p>基于大数据和AI算法，精准匹配目标客户群体</p></div>
+                        </div>
+                        <div class="why-item">
+                            <div class="why-icon"><i class="fas fa-chart-pie"></i></div>
+                            <div class="why-text"><h4>数据驱动</h4><p>用数据指导决策，持续优化获客效果</p></div>
+                        </div>
+                        <div class="why-item">
+                            <div class="why-icon"><i class="fas fa-clock"></i></div>
+                            <div class="why-text"><h4>高效执行</h4><p>自动化工具+专业团队，快速见效</p></div>
+                        </div>
+                        <div class="why-item">
+                            <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="why-text"><h4>安全可靠</h4><p>正规渠道，符合平台规则，数据安全</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="why-us-visual">
+                    <div class="comparison-table">
+                        <div class="table-header"><span>对比项</span><span>传统方式</span><span class="highlight">我们</span></div>
+                        <div class="table-row"><span>获客成本</span><span class="bad">高</span><span class="good">低60%</span></div>
+                        <div class="table-row"><span>询盘质量</span><span class="bad">低</span><span class="good">高3倍</span></div>
+                        <div class="table-row"><span>见效时间</span><span class="bad">3-6月</span><span class="good">1月</span></div>
+                        <div class="table-row"><span>数据可视化</span><span class="bad">无</span><span class="good">完整</span></div>
+                        <div class="table-row"><span>ROI追踪</span><span class="bad">困难</span><span class="good">精准</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="section-tag">关于我们</span>
+                    <h2 class="section-title">专注外贸获客10年</h2>
+                    <p class="about-lead">GlobalTrade Pro是一家专注于外贸全链路营销的服务机构，帮助中国外贸企业实现全球化增长。</p>
+                    <div class="about-stats">
+                        <div class="about-stat"><span class="num">10+</span><span class="label">年行业经验</span></div>
+                        <div class="about-stat"><span class="num">500+</span><span class="label">服务客户</span></div>
+                        <div class="about-stat"><span class="num">50+</span><span class="label">国家覆盖</span></div>
+                        <div class="about-stat"><span class="num">98%</span><span class="label">续约率</span></div>
+                    </div>
+                    <div class="about-values">
+                        <div class="value-item"><i class="fas fa-crosshairs"></i><span>使命</span><p>让外贸获客更简单</p></div>
+                        <div class="value-item"><i class="fas fa-eye"></i><span>愿景</span><p>成为外贸营销首选品牌</p></div>
+                        <div class="value-item"><i class="fas fa-heart"></i><span>价值观</span><p>客户成功第一</p></div>
+                    </div>
+                </div>
+                <div class="about-cards">
+                    <div class="team-card"><div class="team-icon"><i class="fas fa-users"></i></div><h4>专业团队</h4><p>50+行业专家，10年+经验沉淀</p></div>
+                    <div class="team-card"><div class="team-icon"><i class="fas fa-award"></i></div><h4>资质认可</h4><p>LinkedIn官方合作伙伴</p></div>
+                    <div class="team-card"><div class="team-icon"><i class="fas fa-headset"></i></div><h4>7x24服务</h4><p>专属客户经理随时响应</p></div>
+                    <div class="team-card"><div class="team-icon"><i class="fas fa-handshake"></i></div><h4>效果保障</h4><p>无效退款承诺</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <span class="section-tag">联系我们</span>
+                    <h2 class="section-title">开始您的外贸增长之旅</h2>
+                    <p class="contact-desc">填写表单或直接联系我们，获取免费咨询和定制方案</p>
+                    <div class="contact-methods">
+                        <div class="contact-item"><i class="fas fa-phone-alt"></i><div><span class="label">电话</span><a href="tel:+860000000000">+86 000-0000-0000</a></div></div>
+                        <div class="contact-item"><i class="fas fa-envelope"></i><div><span class="label">邮箱</span><a href="mailto:info@globaltradepro.com">info@globaltradepro.com</a></div></div>
+                        <div class="contact-item"><i class="fab fa-weixin"></i><div><span class="label">微信</span><span>GlobalTradePro</span></div></div>
+                        <div class="contact-item"><i class="fab fa-whatsapp"></i><div><span class="label">WhatsApp</span><a href="#">+86 000-0000-0000</a></div></div>
+                    </div>
+                    <div class="contact-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="inquiryForm">
+                        <h3>免费获取方案</h3>
+                        <p>提交后24小时内会有专人对接</p>
+                        <div class="form-group"><input type="text" name="name" placeholder="您的姓名 *" required></div>
+                        <div class="form-group"><input type="email" name="email" placeholder="企业邮箱 *" required></div>
+                        <div class="form-group"><input type="tel" name="phone" placeholder="联系电话"></div>
+                        <div class="form-group">
+                            <select name="service" required>
+                                <option value="">选择感兴趣的服务 *</option>
+                                <option value="linkedin">LinkedIn精准获客</option>
+                                <option value="customs">海关数据洞察</option>
+                                <option value="email">邮件营销</option>
+                                <option value="operation">阿里国际站代运营</option>
+                                <option value="exhibition">展会服务</option>
+                                <option value="consulting">营销咨询培训</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select name="budget">
+                                <option value="">预计月度预算</option>
+                                <option value="1">1万以下</option>
+                                <option value="2">1-3万</option>
+                                <option value="3">3-5万</option>
+                                <option value="4">5-10万</option>
+                                <option value="5">10万以上</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><textarea name="message" placeholder="请描述您的需求..." rows="4"></textarea></div>
+                        <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-paper-plane"></i> 提交咨询</button>
+                        <p class="form-note"><i class="fas fa-lock"></i> 我们承诺保护您的隐私</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="logo"><span class="logo-icon"><i class="fas fa-globe-asia"></i></span><span class="logo-text">GlobalTrade<span class="logo-accent">Pro</span></span></a>
+                    <p>专业外贸全链路拓客服务商，帮助500+企业实现业绩增长。</p>
+                    <div class="contact-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>服务项目</h4>
+                    <ul>
+                        <li><a href="#">LinkedIn获客</a></li>
+                        <li><a href="#">海关数据</a></li>
+                        <li><a href="#">邮件营销</a></li>
+                        <li><a href="#">阿里代运营</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>解决方案</h4>
+                    <ul>
+                        <li><a href="#">机械制造</a></li>
+                        <li><a href="#">电子数码</a></li>
+                        <li><a href="#">纺织服装</a></li>
+                        <li><a href="#">建材家居</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>联系我们</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +86 000-0000-0000</li>
+                        <li><i class="fas fa-envelope"></i> info@globaltradepro.com</li>
+                        <li><i class="fas fa-map-marker"></i> 深圳市南山区科技园</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GlobalTrade Pro. All rights reserved. | <a href="#">隐私政策</a> | <a href="#">服务条款</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Form submission
+        document.getElementById('inquiryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('感谢您的咨询！我们会尽快与您联系。');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
