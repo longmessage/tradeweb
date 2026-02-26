@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Analyzer - GlobalTrade Pro</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css.all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .tool-container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        .tool-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
         .tool-header { text-align: center; margin-bottom: 40px; }
         .tool-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
         .tool-header p { color: #666; font-size: 1.1rem; }
-        .tool-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .pro-badge { display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: 10px; }
+        .tool-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
         .url-input-group { display: flex; gap: 10px; margin-bottom: 30px; }
         .url-input-group input { flex: 1; padding: 16px 20px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; transition: border-color 0.3s; }
         .url-input-group input:focus { outline: none; border-color: #3b82f6; }
@@ -35,20 +36,38 @@
         .issue-list li.warning { border-color: #f59e0b; }
         .issue-list li.error { border-color: #ef4444; }
         .issue-list li.success { border-color: #10b981; }
+        
+        /* AI 分析结果样式 */
+        .ai-section { margin-top: 30px; border-top: 2px dashed #e5e7eb; padding-top: 30px; }
+        .ai-section h3 { color: #7c3aed; }
+        .ai-section h3 i { color: #7c3aed; }
+        .ai-btn { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+        .ai-btn:hover { box-shadow: 0 8px 20px rgba(124,58,237,0.3); }
+        .ai-result { background: linear-gradient(135deg, #f5f3ff, #ede9fe); padding: 25px; border-radius: 12px; margin-top: 20px; }
+        .ai-result h4 { color: #7c3aed; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .ai-result .field { margin-bottom: 15px; }
+        .ai-result .field-label { font-weight: 600; color: #374151; margin-bottom: 5px; }
+        .ai-result .field-value { color: #64748b; line-height: 1.6; }
+        .ai-result .json-output { background: #1e1b4b; color: #a5b4fc; padding: 20px 8px; font-family: mon; border-radius:ospace; white-space: pre-wrap; margin-top: 15px; }
+        
         .loading { text-align: center; padding: 40px; display: none; }
         .loading.active { display: block; }
         .spinner { width: 50px; height: 50px; border: 4px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: #3b82f6; text-decoration: none; margin-bottom: 20px; }
-        .back-btn:hover { text-decoration: underline; }
+        
+        .back-btn { position: fixed; bottom: 80px; right: 20px; background: #3b82f6; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; display: flex; align-items: center; gap: 8px; z-index: 100; }
+        .back-btn:hover { background: #2563eb; }
+        
+        .locked-tip { background: #fef3c7; border: 1px solid #fcd34d; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
+        .locked-tip a { color: #d97706; font-weight: 600; }
     </style>
 </head>
 <body style="background: #f5f7fa;">
-    <a href="tools.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回工具中心</a>
+    <a href="../tools.html" class="back-btn"><i class="fas fa-home"></i> 返回首页</a>
     
     <div class="tool-container">
         <div class="tool-header">
-            <h1><i class="fas fa-globe" style="color: #3b82f6;"></i> Website Analyzer</h1>
+            <h1><i class="fas fa-globe" style="color: #3b82f6;"></i> Website Analyzer <span class="pro-badge">专业版</span></h1>
             <p>输入任意网站 URL，获取完整的 SEO、性能和安全性分析报告</p>
         </div>
         
@@ -87,6 +106,46 @@
                     <h3><i class="fas fa-check-circle"></i> 优化建议</h3>
                     <ul class="issue-list" id="issues"></ul>
                 </div>
+                
+                <!-- AI 分析功能（仅专业版） -->
+                <div class="ai-section" id="aiSection">
+                    <h3><i class="fas fa-robot"></i> AI 智能分析 <span class="pro-badge">专业版</span></h3>
+                    <div id="aiContent">
+                        <button class="url-input-group button ai-btn" onclick="runAIAnalysis()" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-magic"></i> 获取 AI 外贸分析建议
+                        </button>
+                        <div class="locked-tip" id="lockedTip" style="display: none;">
+                            此功能仅对专业版会员开放 <a href="../payment.html?plan=pro">立即升级</a>
+                        </div>
+                    </div>
+                    <div class="ai-result" id="aiResult" style="display: none;">
+                        <h4><i class="fas fa-lightbulb"></i> AI 分析结果</h4>
+                        <div class="field">
+                            <div class="field-label">📋 公司核心产品</div>
+                            <div class="field-value" id="aiProducts">-</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">🎯 目标市场</div>
+                            <div class="field-value" id="aiMarket">-</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">📦 进口概率分析</div>
+                            <div class="field-value" id="aiImport">-</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">💡 供应商切入角度</div>
+                            <div class="field-value" id="aiEntry">-</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">✉️ 个性化开场白</div>
+                            <div class="field-value" id="aiOpening" style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #7c3aed;">-</div>
+                        </div>
+                    </div>
+                    <div class="loading" id="aiLoading">
+                        <div class="spinner" style="border-top-color: #7c3aed;"></div>
+                        <p>AI 正在分析外贸价值...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -97,6 +156,20 @@
         if (!loggedIn) {
             alert('请先登录后使用工具');
             window.location.href = '../login.html';
+        }
+        
+        // 检查会员等级
+        const currentUser = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
+        const userPlan = currentUser.plan || 'free';
+        
+        // 如果不是专业版，显示提示
+        if (userPlan !== 'pro') {
+            document.getElementById('aiContent').innerHTML = `
+                <div class="locked-tip">
+                    🔒 此功能仅对专业版会员开放<br>
+                    <a href="../payment.html?plan=pro">立即升级到专业版</a>
+                </div>
+            `;
         }
         
         function getScoreClass(score) {
@@ -155,6 +228,44 @@
                 document.getElementById('loading').classList.remove('active');
                 document.getElementById('results').classList.add('active');
             }, 2000);
+        }
+        
+        // AI 分析功能
+        function runAIAnalysis() {
+            if (userPlan !== 'pro') {
+                alert('此功能仅对专业版会员开放');
+                return;
+            }
+            
+            const url = document.getElementById('websiteUrl').value.trim();
+            if (!url) {
+                alert('请先输入网站 URL 并进行分析');
+                return;
+            }
+            
+            document.getElementById('aiLoading').classList.add('active');
+            document.getElementById('aiResult').style.display = 'none';
+            
+            // 模拟 AI 分析
+            setTimeout(() => {
+                // 模拟 AI 分析结果
+                const results = {
+                    products: "根据网站分析，该公司主要从事机械设备/工业零部件生产和出口，主要产品包括工业马达、泵类设备、自动化控制系统等。",
+                    market: "目标市场主要集中在北美（美国、加拿大）、欧洲（德国、英国、法国）和东南亚地区。产品定位于中高端工业市场。",
+                    import_probability: "高概率进口。该公司为生产型企业，具备完善的采购体系。主要从中国进口原材料和零部件，有稳定的供应链需求。",
+                    entry_angle: "1) 提供性价比更高的同类产品替代方案；2) 展示在特定零部件上的技术优势；3) 提供快速交付和本地化服务支持；4) 展示成功合作案例。",
+                    opening: "Dear [Name], I noticed that [Company Name] is a leading manufacturer in the industrial equipment sector, and I believe we can help you reduce production costs by 15-20% without compromising quality."
+                };
+                
+                document.getElementById('aiProducts').textContent = results.products;
+                document.getElementById('aiMarket').textContent = results.market;
+                document.getElementById('aiImport').textContent = results.import_probability;
+                document.getElementById('aiEntry').textContent = results.entry_angle;
+                document.getElementById('aiOpening').textContent = results.opening;
+                
+                document.getElementById('aiLoading').classList.remove('active');
+                document.getElementById('aiResult').style.display = 'block';
+            }, 3000);
         }
         
         // 回车键触发分析
