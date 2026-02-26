@@ -36,8 +36,9 @@
         .plan-price span { font-size: 0.7rem; font-weight: 400; color: #6b7280; }
     </style>
 </head>
-<a href="index.html" style="position:fixed;bottom:80px;right:20px;z-index:9999;background:#3b82f6;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;"><i class="fas fa-home"></i> 返回首页</a>
 <body>
+    <a href="index.html" style="position:fixed;bottom:80px;right:20px;z-index:9999;background:#3b82f6;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;"><i class="fas fa-home"></i> 返回首页</a>
+    
     <div class="auth-container">
         <div class="auth-header">
             <h1><i class="fas fa-user-plus"></i> 加入 GlobalTrade Pro</h1>
@@ -98,6 +99,7 @@
         </div>
     </div>
 
+    <script src="js/api.js"></script>
     <script>
         let selectedPlan = 'free';
         
@@ -107,7 +109,7 @@
             selectedPlan = el.dataset.plan;
         }
         
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
@@ -120,37 +122,43 @@
                 return;
             }
             
-            // 获取现有用户
-            let users = JSON.parse(localStorage.getItem('tradeweb_users') || '[]');
-            
-            // 检查邮箱是否已存在
-            if (users.find(u => u.email === email)) {
-                showAlert('该邮箱已注册', 'error');
-                return;
+            // 调用API注册
+            try {
+                const result = await UserAPI.register({ name, company, email, password, plan: selectedPlan });
+                
+                if (result.success) {
+                    showAlert('注册成功！正在跳转到登录页面...', 'success');
+                    setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                } else {
+                    showAlert(result.error || '注册失败', 'error');
+                }
+            } catch (err) {
+                // API调用失败，使用本地存储
+                let users = JSON.parse(localStorage.getItem('tradeweb_users') || '[]');
+                
+                if (users.find(u => u.email === email)) {
+                    showAlert('该邮箱已注册', 'error');
+                    return;
+                }
+                
+                const newUser = {
+                    id: Date.now(),
+                    name,
+                    company,
+                    email,
+                    password,
+                    plan: selectedPlan,
+                    balance: 0,
+                    role: 'member',
+                    registeredAt: new Date().toISOString(),
+                    lastLogin: null
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('tradeweb_users', JSON.stringify(users));
+                showAlert('注册成功（本地模式）！', 'success');
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
             }
-            
-            // 创建新用户
-            const newUser = {
-                id: Date.now(),
-                name,
-                company,
-                email,
-                password,
-                plan: selectedPlan,
-                balance: 0,
-                role: 'member',
-                registeredAt: new Date().toISOString(),
-                lastLogin: null
-            };
-            
-            users.push(newUser);
-            localStorage.setItem('tradeweb_users', JSON.stringify(users));
-            
-            showAlert('注册成功！正在跳转到登录页面...', 'success');
-            
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
         });
         
         function showAlert(msg, type) {
