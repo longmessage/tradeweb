@@ -18,20 +18,20 @@
                     <span class="logo-text">GlobalTrade<span class="logo-accent">Pro</span></span>
                 </a>
                 <nav class="nav">
-                    <a href="#services">服务项目</a>
-                    <a href="#solutions">解决方案</a>
-                    <a href="#cases">成功案例</a>
-                    <a href="#resources">资源中心</a>
-                    <a href="#about">关于我们</a>
-                    <a href="register.html" style="color: #3b82f6;">注册会员</a>
+                    <a href="#services" data-i18n="services">服务项目</a>
+                    <a href="#solutions" data-i18n="solutions">解决方案</a>
+                    <a href="#cases" data-i18n="cases">成功案例</a>
+                    <a href="#resources" data-i18n="resources">资源中心</a>
+                    <a href="#about" data-i18n="about">关于我们</a>
+                    <a href="register.html" style="color: #3b82f6;" data-i18n="register">注册会员</a>
                 </nav>
                 <div class="header-actions">
                     <div class="lang-switch">
-                        <a href="#" class="active">中文</a>
+                        <a href="#" onclick="setLang('zh'); return false;" class="active">中文</a>
                         <span>|</span>
-                        <a href="#">EN</a>
+                        <a href="#" onclick="setLang('en'); return false;">EN</a>
                     </div>
-                    <a href="tools.html" class="btn btn-primary">免费试用</a>
+                    <a href="tools.html" class="btn btn-primary" data-i18n="tryFree">免费试用</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars"></i>
@@ -41,13 +41,13 @@
     </header>
 
     <div class="mobile-menu" id="mobileMenu">
-        <a href="#services" onclick="toggleMobileMenu()">服务项目</a>
-        <a href="#solutions" onclick="toggleMobileMenu()">解决方案</a>
-        <a href="#cases" onclick="toggleMobileMenu()">成功案例</a>
-        <a href="#resources" onclick="toggleMobileMenu()">资源中心</a>
-        <a href="#about" onclick="toggleMobileMenu()">关于我们</a>
-        <a href="register.html" onclick="toggleMobileMenu()" style="color: #3b82f6;">注册会员</a>
-        <a href="#contact" onclick="toggleMobileMenu()" class="btn btn-primary btn-block">免费咨询</a>
+        <a href="#services" onclick="toggleMobileMenu()" data-i18n="services">服务项目</a>
+        <a href="#solutions" onclick="toggleMobileMenu()" data-i18n="solutions">解决方案</a>
+        <a href="#cases" onclick="toggleMobileMenu()" data-i18n="cases">成功案例</a>
+        <a href="#resources" onclick="toggleMobileMenu()" data-i18n="resources">资源中心</a>
+        <a href="#about" onclick="toggleMobileMenu()" data-i18n="about">关于我们</a>
+        <a href="register.html" onclick="toggleMobileMenu()" style="color: #3b82f6;" data-i18n="register">注册会员</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="btn btn-primary btn-block" data-i18n="contact">免费咨询</a>
     </div>
 
     <section class="hero">
@@ -55,40 +55,40 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
-                    <span class="badge-dot"></span> 已服务 <strong>500+</strong> 外贸企业
+                    <span class="badge-dot"></span> <span data-i18n="served500">已服务</span> <strong>500+</strong> <span data-i18n="companies">外贸企业</span>
                 </div>
-                <h1 class="hero-title">
+                <h1 class="hero-title" data-i18n="heroTitle">
                     外贸获客不再难<br>
-                    <span class="highlight">全链路拓客解决方案</span>
+                    <span class="highlight" data-i18n="heroSubtitle">全链路拓客解决方案</span>
                 </h1>
-                <p class="hero-desc">
+                <p class="hero-desc" data-i18n="heroDesc">
                     LinkedIn精准获客 · 海关数据洞察 · 邮件营销自动化 · 展会代运营<br>
                     帮助外贸企业低成本获取高质量询盘，月均提升300%有效客户
                 </p>
                 <div class="hero-actions">
-                    <a href="#contact" class="btn btn-primary btn-lg">
+                    <a href="#contact" class="btn btn-primary btn-lg" data-i18n="getPlan">
                         <i class="fas fa-rocket"></i> 免费获取方案
                     </a>
-                    <a href="#cases" class="btn btn-outline btn-lg">
+                    <a href="#cases" class="btn btn-outline btn-lg" data-i18n="viewCases">
                         <i class="fas fa-play"></i> 查看案例
                     </a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <span class="stat-number">10,000+</span>
-                        <span class="stat-label">每月询盘</span>
+                        <span class="stat-label" data-i18n="inquiries">每月询盘</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">50+</span>
-                        <span class="stat-label">覆盖国家</span>
+                        <span class="stat-label" data-i18n="countries">覆盖国家</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">98%</span>
-                        <span class="stat-label">客户满意度</span>
+                        <span class="stat-label" data-i18n="satisfaction">客户满意度</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">300%</span>
-                        <span class="stat-label">平均业绩提升</span>
+                        <span class="stat-label" data-i18n="growth">平均业绩提升</span>
                     </div>
                 </div>
             </div>
@@ -626,8 +626,114 @@
         // Form submission
         document.getElementById('inquiryForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('感谢您的咨询！我们会尽快与您联系。');
+            alert(currentLang === 'zh' ? '感谢您的咨询！我们会尽快与您联系。' : 'Thank you for your inquiry! We will contact you soon.');
             this.reset();
+        });
+        
+        // 多语言配置
+        const translations = {
+            zh: {
+                services: "服务项目",
+                solutions: "解决方案",
+                cases: "成功案例",
+                resources: "资源中心",
+                about: "关于我们",
+                register: "注册会员",
+                tryFree: "免费试用",
+                heroTitle: "外贸获客不再难",
+                heroSubtitle: "全链路拓客解决方案",
+                heroDesc: "LinkedIn精准获客 · 海关数据洞察 · 邮件营销自动化 · 展会代运营<br>帮助外贸企业低成本获取高质量询盘，月均提升300%有效客户",
+                getPlan: "免费获取方案",
+                viewCases: "查看案例",
+                inquiries: "每月询盘",
+                countries: "覆盖国家",
+                satisfaction: "客户满意度",
+                growth: "平均业绩提升",
+                ourServices: "我们的服务",
+                serviceTitle: "全方位外贸拓客解决方案",
+                serviceDesc: "从市场调研到成交转化，我们提供全链路服务，让获客变得简单高效",
+                linkedin: "LinkedIn精准获客",
+                customs: "海关数据洞察",
+                email: "邮件营销自动化",
+                alibaba: "阿里国际站代运营",
+                exhibition: "展会服务",
+                training: "营销咨询培训",
+                learnMore: "了解更多",
+                contact: "联系我们",
+                freeTrial: "免费注册",
+                served500: "已服务",
+                companies: "外贸企业"
+            },
+            en: {
+                services: "Services",
+                solutions: "Solutions",
+                cases: "Cases",
+                resources: "Resources",
+                about: "About",
+                register: "Register",
+                tryFree: "Try Free",
+                heroTitle: "Foreign Trade Lead Generation",
+                heroSubtitle: "Full-Chain Customer Acquisition",
+                heroDesc: "LinkedIn Precision Marketing · Customs Data Insights · Email Automation · Exhibition Services<br>Help foreign trade companies acquire high-quality inquiries at low cost",
+                getPlan: "Get Free Plan",
+                viewCases: "View Cases",
+                inquiries: "Monthly Inquiries",
+                countries: "Countries",
+                satisfaction: "Satisfaction",
+                growth: "Growth",
+                ourServices: "Our Services",
+                serviceTitle: "Full-Range Trade Solutions",
+                serviceDesc: "From market research to deal closure, we provide full-chain services",
+                linkedin: "LinkedIn Marketing",
+                customs: "Customs Data",
+                email: "Email Marketing",
+                alibaba: "Alibaba Operations",
+                exhibition: "Exhibition Services",
+                training: "Marketing Consulting",
+                learnMore: "Learn More",
+                contact: "Contact Us",
+                freeTrial: "Register Free",
+                served500: "Serving",
+                companies: "Companies"
+            }
+        };
+        
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            applyTranslations();
+            updateLangButtons();
+        }
+        
+        function applyTranslations() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            
+            // 更新页面标题
+            if (currentLang === 'en') {
+                document.title = "GlobalTrade Pro - Foreign Trade Lead Generation Expert";
+            } else {
+                document.title = "GlobalTrade Pro - 外贸全链路拓客专家";
+            }
+        }
+        
+        function updateLangButtons() {
+            document.querySelectorAll('.lang-switch a').forEach((link, idx) => {
+                if (idx === 0 && currentLang === 'zh') link.classList.add('active');
+                else if (idx === 1 && currentLang === 'en') link.classList.add('active');
+                else link.classList.remove('active');
+            });
+        }
+        
+        // 初始化语言
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations();
+            updateLangButtons();
         });
     </script>
 </body>
