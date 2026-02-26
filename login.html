@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - GlobalTrade Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1e3a5f, #2d5a87); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-container { background: white; border-radius: 24px; overflow: hidden; max-width: 420px; width: 100%; box-shadow: 0 25px 80px rgba(0,0,0,0.3); }
+        .auth-header { background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 40px; text-align: center; color: white; }
+        .auth-header h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .auth-header p { opacity: 0.9; }
+        .auth-body { padding: 40px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
+        .form-group input { width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 15px; transition: border-color 0.3s; box-sizing: border-box; }
+        .form-group input:focus { outline: none; border-color: #3b82f6; }
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        .submit-btn:hover { transform: translateY(-2px); }
+        .auth-footer { text-align: center; margin-top: 20px; color: #6b7280; }
+        .auth-footer a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+        .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; display: none; }
+        .alert.success { background: #d1fae5; color: #065f46; display: block; }
+        .alert.error { background: #fee2e2; color: #991b1b; display: block; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1><i class="fas fa-sign-in-alt"></i> 会员登录</h1>
+            <p>欢迎回来，继续使用外贸拓客工具</p>
+        </div>
+        
+        <div class="auth-body">
+            <div class="alert" id="alert"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="password" placeholder="输入密码" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-sign-in-alt"></i> 立即登录
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                还没有账号? <a href="register.html">立即注册</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // 从 localStorage 验证用户
+            const storedUser = localStorage.getItem('tradeweb_user');
+            
+            if (!storedUser) {
+                showAlert('账号不存在，请先注册', 'error');
+                return;
+            }
+            
+            const user = JSON.parse(storedUser);
+            
+            if (user.email !== email) {
+                showAlert('邮箱输入错误', 'error');
+                return;
+            }
+            
+            // 登录成功，保存登录状态
+            localStorage.setItem('tradeweb_logged_in', 'true');
+            showAlert('登录成功！正在跳转到工具中心...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'tools.html';
+            }, 1500);
+        });
+        
+        function showAlert(msg, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = msg;
+            alert.className = 'alert ' + type;
+        }
+    </script>
+</body>
+</html>

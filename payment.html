@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择套餐 - GlobalTrade Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1e3a5f, #2d5a87); min-height: 100vh; padding: 40px 20px; }
+        .payment-container { max-width: 900px; margin: 0 auto; }
+        .payment-header { text-align: center; color: white; margin-bottom: 40px; }
+        .payment-header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .payment-header p { opacity: 0.9; font-size: 1.1rem; }
+        .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+        .plan-card { background: white; border-radius: 20px; padding: 30px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
+        .plan-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .plan-card.featured { border: 3px solid #3b82f6; position: relative; }
+        .plan-card.featured::before { content: '最热门'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 4px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .plan-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.8rem; }
+        .plan-card.free .plan-icon { background: #e0e7ff; color: #6366f1; }
+        .plan-card.basic .plan-icon { background: #d1fae5; color: #10b981; }
+        .plan-card.pro .plan-icon { background: #fef3c7; color: #f59e0b; }
+        .plan-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+        .plan-price { font-size: 2.5rem; font-weight: 800; color: #3b82f6; margin-bottom: 5px; }
+        .plan-price span { font-size: 1rem; font-weight: 400; color: #6b7280; }
+        .plan-desc { color: #6b7280; margin-bottom: 20px; font-size: 14px; }
+        .plan-features { list-style: none; text-align: left; margin-bottom: 25px; }
+        .plan-features li { padding: 10px 0; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; gap: 10px; }
+        .plan-features li:last-child { border-bottom: none; }
+        .plan-features li i { color: #10b981; }
+        .plan-features li.disabled { color: #9ca3af; }
+        .plan-features li.disabled i { color: #9ca3af; }
+        .select-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .plan-card.free .select-btn { background: #f3f4f6; color: #374151; }
+        .plan-card.free .select-btn:hover { background: #e5e7eb; }
+        .plan-card.basic .select-btn { background: #10b981; color: white; }
+        .plan-card.basic .select-btn:hover { background: #059669; }
+        .plan-card.pro .select-btn { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .plan-card.pro .select-btn:hover { background: linear-gradient(135deg, #d97706, #b45309); }
+        
+        .payment-methods { background: white; border-radius: 20px; padding: 30px; margin-top: 30px; }
+        .payment-methods h3 { margin-bottom: 20px; text-align: center; }
+        .methods-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .method { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .method:hover, .method.selected { border-color: #3b82f6; background: #eff6ff; }
+        .method i { font-size: 1.5rem; }
+        
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: white; text-decoration: none; margin-bottom: 20px; }
+        .back-btn:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <a href="register.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回注册</a>
+    
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1><i class="fas fa-crown"></i> 选择您的套餐</h1>
+            <p>解锁更多外贸拓客工具，助力业务增长</p>
+        </div>
+        
+        <div class="plans-grid">
+            <div class="plan-card free">
+                <div class="plan-icon"><i class="fas fa-user"></i></div>
+                <div class="plan-name">免费版</div>
+                <div class="plan-price">¥0<span>/月</span></div>
+                <div class="plan-desc">适合入门体验</div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Website Analyzer</li>
+                    <li><i class="fas fa-check"></i> AI Email Generator</li>
+                    <li class="disabled"><i class="fas fa-times"></i> LinkedIn 拓客</li>
+                    <li class="disabled"><i class="fas fa-times"></i> 海关数据查询</li>
+                    <li class="disabled"><i class="fas fa-times"></i> 邮件群发系统</li>
+                </ul>
+                <button class="select-btn" onclick="selectPlan('free')">当前套餐</button>
+            </div>
+            
+            <div class="plan-card basic featured">
+                <div class="plan-icon"><i class="fas fa-star"></i></div>
+                <div class="plan-name">基础版</div>
+                <div class="plan-price">¥99<span>/月</span></div>
+                <div class="plan-desc">适合小微企业</div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Website Analyzer</li>
+                    <li><i class="fas fa-check"></i> AI Email Generator</li>
+                    <li><i class="fas fa-check"></i> LinkedIn 拓客</li>
+                    <li><i class="fas fa-check"></i> 海关数据查询</li>
+                    <li class="disabled"><i class="fas fa-times"></i> 邮件群发系统</li>
+                </ul>
+                <button class="select-btn" onclick="selectPlan('basic')">立即升级</button>
+            </div>
+            
+            <div class="plan-card pro">
+                <div class="plan-icon"><i class="fas fa-crown"></i></div>
+                <div class="plan-name">专业版</div>
+                <div class="plan-price">¥299<span>/月</span></div>
+                <div class="plan-desc">适合成长型企业</div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Website Analyzer</li>
+                    <li><i class="fas fa-check"></i> AI Email Generator</li>
+                    <li><i class="fas fa-check"></i> LinkedIn 拓客</li>
+                    <li><i class="fas fa-check"></i> 海关数据查询</li>
+                    <li><i class="fas fa-check"></i> 邮件群发系统</li>
+                </ul>
+                <button class="select-btn" onclick="selectPlan('pro')">立即升级</button>
+            </div>
+        </div>
+        
+        <div class="payment-methods">
+            <h3><i class="fas fa-credit-card"></i> 选择支付方式</h3>
+            <div class="methods-grid">
+                <div class="method selected" onclick="selectMethod(this)">
+                    <i class="fab fa-weixin" style="color: #07c160;"></i>
+                    <span>微信支付</span>
+                </div>
+                <div class="method" onclick="selectMethod(this)">
+                    <i class="fab fa-alipay" style="color: #1677ff;"></i>
+                    <span>支付宝</span>
+                </div>
+                <div class="method" onclick="selectMethod(this)">
+                    <i class="fas fa-university" style="color: #3b82f6;"></i>
+                    <span>银行转账</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedPlan = 'free';
+        
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            
+            const prices = { free: 0, basic: 99, pro: 299 };
+            const confirmMsg = plan === 'free' 
+                ? '您选择的是免费版，无需支付。是否确认？'
+                : `您选择的是${plan === 'basic' ? '基础版' : '专业版'}，价格 ¥${prices[plan]}/月。\n\n（演示版本，仅作展示）`;
+            
+            if (confirm(confirmMsg)) {
+                // 更新用户套餐
+                const user = JSON.parse(localStorage.getItem('tradeweb_user') || '{}');
+                user.plan = plan;
+                user.planStartedAt = new Date().toISOString();
+                localStorage.setItem('tradeweb_user', JSON.stringify(user));
+                
+                if (plan === 'free') {
+                    window.location.href = 'tools.html';
+                } else {
+                    alert('支付成功！您现在可以使用更多工具了。');
+                    window.location.href = 'tools.html';
+                }
+            }
+        }
+        
+        function selectMethod(el) {
+            document.querySelectorAll('.method').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+    </script>
+</body>
+</html>

@@ -131,10 +131,10 @@
             const user = { name, email, plan: selectedPlan, registeredAt: new Date().toISOString() };
             localStorage.setItem('tradeweb_user', JSON.stringify(user));
             
-            showAlert('注册成功！正在跳转到工具中心...', 'success');
+            showAlert('注册成功！正在跳转支付页面...', 'success');
             
             setTimeout(() => {
-                window.location.href = 'tools.html';
+                window.location.href = 'payment.html';
             }, 1500);
         });
         
