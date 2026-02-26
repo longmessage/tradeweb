@@ -94,6 +94,7 @@
         <ul class="menu">
             <li><a href="#" class="active" data-tab="dashboard" onclick="switchTab(this)"><i class="fas fa-home"></i> 控制台</a></li>
             <li><a href="#" data-tab="users" onclick="switchTab(this)"><i class="fas fa-users"></i> 用户管理</a></li>
+            <li><a href="#" data-tab="ai-history" onclick="switchTab(this)"><i class="fas fa-history"></i> AI分析记录</a></li>
             <li><a href="#" data-tab="ai-analysis" onclick="switchTab(this)"><i class="fas fa-robot"></i> AI分析管理</a></li>
             <li><a href="#" data-tab="tools" onclick="switchTab(this)"><i class="fas fa-tools"></i> 工具管理</a></li>
             <li><a href="#" data-tab="orders" onclick="switchTab(this)"><i class="fas fa-shopping-cart"></i> 订单管理</a></li>
@@ -272,6 +273,32 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        
+        <!-- AI分析历史记录 -->
+        <div class="tab-content" id="tab-ai-history">
+            <div class="content-card">
+                <h2><i class="fas fa-history"></i> AI 分析历史记录</h2>
+                <p style="color: #64748b; margin-bottom: 20px;">用户使用 AI 分析工具的记录</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>网站URL</th>
+                            <th>分析用户</th>
+                            <th>分析时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="aiHistoryTable">
+                        <tr><td colspan="5" style="text-align: center; color: #999;">暂无记录</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="content-card" id="aiHistoryDetail" style="display: none;">
+                <h2><i class="fas fa-lightbulb"></i> 分析详情</h2>
+                <div id="aiHistoryContent"></div>
             </div>
         </div>
         
@@ -711,6 +738,76 @@
             }
         }
         
+        // 渲染 AI 分析历史
+        function renderAIHistory() {
+            const history = JSON.parse(localStorage.getItem('ai_analysis_history') || '[]');
+            const tbody = document.getElementById('aiHistoryTable');
+            
+            if (history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #999;">暂无记录</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = history.map((item, idx) => {
+                const date = new Date(item.date).toLocaleString();
+                return `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${item.url}</td>
+                        <td>${item.user}</td>
+                        <td>${date}</td>
+                        <td class="actions">
+                            <button class="edit" onclick="viewAIHistory(${idx})"><i class="fas fa-eye"></i> 查看</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 查看 AI 历史详情
+        function viewAIHistory(idx) {
+            const history = JSON.parse(localStorage.getItem('ai_analysis_history') || '[]');
+            const item = history[idx];
+            
+            if (!item) return;
+            
+            const result = item.result;
+            const html = `
+                <div style="background: #f5f3ff; padding: 20px; border-radius: 12px;">
+                    <h4 style="color: #7c3aed; margin-bottom: 15px;">🌐 ${item.url}</h4>
+                    <p style="color: #64748b; margin-bottom: 15px;">👤 用户: ${item.user} | 📅 ${new Date(item.date).toLocaleString()}</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <strong>📋 公司概述:</strong>
+                        <p style="color: #64748b; margin-top: 5px;">${result.company_summary || '-'}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <strong>🎯 目标市场:</strong>
+                        <p style="color: #64748b; margin-top: 5px;">${result.target_market || '-'}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <strong>📦 进口概率:</strong>
+                        <p style="color: #64748b; margin-top: 5px;">${result.import_probability || '-'}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <strong>💡 切入角度:</strong>
+                        <p style="color: #64748b; margin-top: 5px;">${result.suggested_entry_point || '-'}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <strong>✉️ 开场白:</strong>
+                        <p style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #7c3aed; margin-top: 5px;">${result.opening_sentence || '-'}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('aiHistoryContent').innerHTML = html;
+            document.getElementById('aiHistoryDetail').style.display = 'block';
+        }
+        
         // 退出登录
         function logout() {
             if (confirm('确定要退出登录吗？')) {
@@ -721,9 +818,10 @@
             }
         }
         
-        // 初始化
-        renderUsers();
+        // renderUsers();
+        初始化
         renderAIRequests();
+        renderAIHistory();
     </script>
 </body>
 </html>
