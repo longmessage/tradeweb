@@ -121,6 +121,10 @@
                     <div class="ai-result" id="aiResult" style="display: none;">
                         <h4><i class="fas fa-lightbulb"></i> AI 分析结果</h4>
                         <div class="field">
+                            <div class="field-label">🌐 公司网站</div>
+                            <div class="field-value" id="aiUrl" style="color: #3b82f6; word-break: break-all;">-</div>
+                        </div>
+                        <div class="field">
                             <div class="field-label">📋 公司核心产品</div>
                             <div class="field-value" id="aiProducts">-</div>
                         </div>
@@ -250,6 +254,7 @@
             setTimeout(() => {
                 // 模拟 AI 分析结果
                 const results = {
+                    url: finalUrl,
                     products: "根据网站分析，该公司主要从事机械设备/工业零部件生产和出口，主要产品包括工业马达、泵类设备、自动化控制系统等。",
                     market: "目标市场主要集中在北美（美国、加拿大）、欧洲（德国、英国、法国）和东南亚地区。产品定位于中高端工业市场。",
                     import_probability: "高概率进口。该公司为生产型企业，具备完善的采购体系。主要从中国进口原材料和零部件，有稳定的供应链需求。",
@@ -258,6 +263,7 @@
                 };
                 
                 document.getElementById('aiProducts').textContent = results.products;
+                document.getElementById('aiUrl').textContent = results.url;
                 document.getElementById('aiMarket').textContent = results.market;
                 document.getElementById('aiImport').textContent = results.import_probability;
                 document.getElementById('aiEntry').textContent = results.entry_angle;
