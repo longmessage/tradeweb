@@ -14,35 +14,26 @@
         .auth-header h1 { font-size: 1.8rem; margin-bottom: 8px; }
         .auth-header p { opacity: 0.9; }
         .auth-body { padding: 40px; }
-        .form-group { margin-bottom: 24px; }
+        .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
         .form-group input { width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 15px; transition: border-color 0.3s; box-sizing: border-box; }
         .form-group input:focus { outline: none; border-color: #3b82f6; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
         .submit-btn:hover { transform: translateY(-2px); }
-        .divider { text-align: center; margin: 24px 0; color: #9ca3af; position: relative; }
-        .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #e5e7eb; }
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-        .social-login { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .social-btn { padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; transition: background 0.2s; }
-        .social-btn:hover { background: #f9fafb; }
-        .auth-footer { text-align: center; margin-top: 24px; color: #6b7280; }
+        .auth-footer { text-align: center; margin-top: 20px; color: #6b7280; }
         .auth-footer a { color: #3b82f6; text-decoration: none; font-weight: 500; }
-        .auth-footer a:hover { text-decoration: underline; }
-        
-        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-        .plan { padding: 16px 12px; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; display: none; }
+        .alert.show { display: block; }
+        .alert.success { background: #d1fae5; color: #065f46; }
+        .alert.error { background: #fee2e2; color: #991b1b; }
+        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .plan { padding: 15px 10px; border: 2px solid #e5e7eb; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .plan:hover { border-color: #3b82f6; }
         .plan.selected { border-color: #3b82f6; background: #eff6ff; }
-        .plan-name { font-weight: 600; color: #374151; margin-bottom: 4px; }
-        .plan-price { font-size: 1.2rem; font-weight: 700; color: #3b82f6; }
-        .plan-price span { font-size: 0.8rem; font-weight: 400; color: #6b7280; }
-        
-        .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; display: none; }
-        .alert.success { background: #d1fae5; color: #065f46; display: block; }
-        .alert.error { background: #fee2e2; color: #991b1b; display: block; }
+        .plan-name { font-weight: 600; color: #374151; font-size: 0.9rem; }
+        .plan-price { font-size: 1.1rem; font-weight: 700; color: #3b82f6; }
+        .plan-price span { font-size: 0.7rem; font-weight: 400; color: #6b7280; }
     </style>
 </head>
 <body>
@@ -63,7 +54,7 @@
                     </div>
                     <div class="form-group">
                         <label>公司</label>
-                        <input type="text" id="company" placeholder="公司名称" required>
+                        <input type="text" id="company" placeholder="公司名称">
                     </div>
                 </div>
                 
@@ -119,6 +110,7 @@
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
+            const company = document.getElementById('company').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             
@@ -127,21 +119,43 @@
                 return;
             }
             
-            // 保存到 localStorage (模拟)
-            const user = { name, email, plan: selectedPlan, registeredAt: new Date().toISOString() };
-            localStorage.setItem('tradeweb_user', JSON.stringify(user));
+            // 获取现有用户
+            let users = JSON.parse(localStorage.getItem('tradeweb_users') || '[]');
             
-            showAlert('注册成功！正在跳转支付页面...', 'success');
+            // 检查邮箱是否已存在
+            if (users.find(u => u.email === email)) {
+                showAlert('该邮箱已注册', 'error');
+                return;
+            }
+            
+            // 创建新用户
+            const newUser = {
+                id: Date.now(),
+                name,
+                company,
+                email,
+                password,
+                plan: selectedPlan,
+                balance: 0,
+                role: 'member',
+                registeredAt: new Date().toISOString(),
+                lastLogin: null
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('tradeweb_users', JSON.stringify(users));
+            
+            showAlert('注册成功！正在跳转到登录页面...', 'success');
             
             setTimeout(() => {
-                window.location.href = 'payment.html';
+                window.location.href = 'login.html';
             }, 1500);
         });
         
         function showAlert(msg, type) {
             const alert = document.getElementById('alert');
             alert.textContent = msg;
-            alert.className = 'alert ' + type;
+            alert.className = 'alert show ' + type;
         }
     </script>
 </body>

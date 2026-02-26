@@ -16,29 +16,48 @@
         .auth-body { padding: 40px; }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
-        .form-group input { width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 15px; transition: border-color 0.3s; box-sizing: border-box; }
+        .form-group input { width: 100%; padding: 14px 18px; border: e5e72px solid #eb; border-radius: 12px; font-size: 15px; transition: border-color 0.3s; box-sizing: border-box; }
         .form-group input:focus { outline: none; border-color: #3b82f6; }
         .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
         .submit-btn:hover { transform: translateY(-2px); }
         .auth-footer { text-align: center; margin-top: 20px; color: #6b7280; }
         .auth-footer a { color: #3b82f6; text-decoration: none; font-weight: 500; }
-        .auth-footer a:hover { text-decoration: underline; }
         .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; display: none; }
-        .alert.success { background: #d1fae5; color: #065f46; display: block; }
-        .alert.error { background: #fee2e2; color: #991b1b; display: block; }
+        .alert.show { display: block; }
+        .alert.error { background: #fee2e2; color: #991b1b; }
+        .alert.success { background: #d1fae5; color: #065f46; }
+        .role-select { display: flex; gap: 10px; margin-bottom: 20px; }
+        .role-option { flex: 1; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .role-option:hover { border-color: #3b82f6; }
+        .role-option.selected { border-color: #3b82f6; background: #eff6ff; }
+        .role-option i { font-size: 1.5rem; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-header">
             <h1><i class="fas fa-sign-in-alt"></i> 会员登录</h1>
-            <p>欢迎回来，继续使用外贸拓客工具</p>
+            <p>欢迎回来</p>
         </div>
         
         <div class="auth-body">
             <div class="alert" id="alert"></div>
             
             <form id="loginForm">
+                <div class="form-group">
+                    <label>账号类型</label>
+                    <div class="role-select">
+                        <div class="role-option selected" data-role="member" onclick="selectRole(this)">
+                            <i class="fas fa-user"></i>
+                            <div>会员用户</div>
+                        </div>
+                        <div class="role-option" data-role="admin" onclick="selectRole(this)">
+                            <i class="fas fa-cog"></i>
+                            <div>管理员</div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="form-group">
                     <label>邮箱</label>
                     <input type="email" id="email" placeholder="your@email.com" required>
@@ -61,40 +80,63 @@
     </div>
 
     <script>
+        let selectedRole = 'member';
+        
+        function selectRole(el) {
+            document.querySelectorAll('.role-option').forEach(r => r.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedRole = el.dataset.role;
+        }
+        
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             
-            // 从 localStorage 验证用户
-            const storedUser = localStorage.getItem('tradeweb_user');
+            // 获取用户列表
+            const users = JSON.parse(localStorage.getItem('tradeweb_users') || '[]');
             
-            if (!storedUser) {
-                showAlert('账号不存在，请先注册', 'error');
-                return;
+            if (selectedRole === 'admin') {
+                // 管理员登录
+                const adminEmail = 'admin@tradeweb.com';
+                const adminPassword = 'admin123';
+                
+                if (email === adminEmail && password === adminPassword) {
+                    localStorage.setItem('tradeweb_logged_in', 'true');
+                    localStorage.setItem('tradeweb_user_role', 'admin');
+                    localStorage.setItem('tradeweb_current_user', JSON.stringify({name: 'Administrator', email: adminEmail, role: 'admin'}));
+                    showAlert('登录成功！正在跳转到管理后台...', 'success');
+                    setTimeout(() => { window.location.href = 'admin.html'; }, 1500);
+                } else {
+                    showAlert('管理员账号或密码错误', 'error');
+                }
+            } else {
+                // 会员登录
+                const user = users.find(u => u.email === email);
+                
+                if (!user) {
+                    showAlert('账号不存在，请先注册', 'error');
+                    return;
+                }
+                
+                if (user.password !== password) {
+                    showAlert('密码输入错误', 'error');
+                    return;
+                }
+                
+                localStorage.setItem('tradeweb_logged_in', 'true');
+                localStorage.setItem('tradeweb_user_role', 'member');
+                localStorage.setItem('tradeweb_current_user', JSON.stringify(user));
+                showAlert('登录成功！正在跳转到会员中心...', 'success');
+                setTimeout(() => { window.location.href = 'member.html'; }, 1500);
             }
-            
-            const user = JSON.parse(storedUser);
-            
-            if (user.email !== email) {
-                showAlert('邮箱输入错误', 'error');
-                return;
-            }
-            
-            // 登录成功，保存登录状态
-            localStorage.setItem('tradeweb_logged_in', 'true');
-            showAlert('登录成功！正在跳转到工具中心...', 'success');
-            
-            setTimeout(() => {
-                window.location.href = 'tools.html';
-            }, 1500);
         });
         
         function showAlert(msg, type) {
             const alert = document.getElementById('alert');
             alert.textContent = msg;
-            alert.className = 'alert ' + type;
+            alert.className = 'alert show ' + type;
         }
     </script>
 </body>
