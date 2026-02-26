@@ -164,7 +164,12 @@
         
         // 检查会员等级
         const currentUser = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
-        const userPlan = currentUser.plan || 'free';
+        const userRole = localStorage.getItem('tradeweb_user_role');
+        // 管理员也拥有专业版权限
+        let userPlan = currentUser.plan || 'free';
+        if (userRole === 'admin') {
+            userPlan = 'pro';
+        }
         
         // 如果不是专业版，显示提示
         if (userPlan !== 'pro') {
