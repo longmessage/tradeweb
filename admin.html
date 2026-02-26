@@ -94,6 +94,7 @@
         <ul class="menu">
             <li><a href="#" class="active" data-tab="dashboard" onclick="switchTab(this)"><i class="fas fa-home"></i> 控制台</a></li>
             <li><a href="#" data-tab="users" onclick="switchTab(this)"><i class="fas fa-users"></i> 用户管理</a></li>
+            <li><a href="#" data-tab="ai-analysis" onclick="switchTab(this)"><i class="fas fa-robot"></i> AI分析管理</a></li>
             <li><a href="#" data-tab="tools" onclick="switchTab(this)"><i class="fas fa-tools"></i> 工具管理</a></li>
             <li><a href="#" data-tab="orders" onclick="switchTab(this)"><i class="fas fa-shopping-cart"></i> 订单管理</a></li>
             <li><a href="#" data-tab="settings" onclick="switchTab(this)"><i class="fas fa-cog"></i> 系统设置</a></li>
@@ -271,6 +272,33 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        
+        <!-- AI分析管理 -->
+        <div class="tab-content" id="tab-ai-analysis">
+            <div class="content-card">
+                <h2><i class="fas fa-robot"></i> AI 分析请求</h2>
+                <p style="color: #64748b; margin-bottom: 20px;">用户提交的 AI 分析申请列表，点击"执行分析"使用 AI 模型分析网站</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>网站URL</th>
+                            <th>提交用户</th>
+                            <th>提交时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="aiTable">
+                        <tr><td colspan="6" style="text-align: center; color: #999;">暂无分析请求</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="content-card" id="aiResultCard" style="display: none;">
+                <h2><i class="fas fa-lightbulb"></i> 分析结果</h2>
+                <div id="aiResultContent"></div>
             </div>
         </div>
         
@@ -514,6 +542,105 @@
             alert('设置保存成功！');
         });
         
+        // AI 分析管理
+        function renderAIRequests() {
+            const requests = JSON.parse(localStorage.getItem('analysis_requests') || '[]');
+            const tbody = document.getElementById('aiTable');
+            
+            if (requests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">暂无分析请求</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = requests.map((req, idx) => {
+                const statusBadge = req.status === 'pending' ? 
+                    '<span class="badge free">待处理</span>' : 
+                    '<span class="badge basic">已完成</span>';
+                const date = new Date(req.date).toLocaleString();
+                return `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${req.url}</td>
+                        <td>${req.user}</td>
+                        <td>${date}</td>
+                        <td>${statusBadge}</td>
+                        <td class="actions">
+                            <button class="edit" onclick="runAIAnalysis(${idx})"><i class="fas fa-play"></i> 执行分析</button>
+                            <button class="delete" onclick="deleteAIRequest(${idx})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 执行 AI 分析
+        async function runAIAnalysis(idx) {
+            const requests = JSON.parse(localStorage.getItem('analysis_requests') || '[]');
+            const req = requests[idx];
+            
+            if (!req) return;
+            
+            if (!confirm('确认要分析这个网站吗？\n' + req.url)) return;
+            
+            // 显示分析中
+            document.getElementById('aiResultContent').innerHTML = '<div class="loading active"><div class="spinner"></div><p>AI 正在分析中...</p></div>';
+            document.getElementById('aiResultCard').style.display = 'block';
+            
+            // 这里可以调用真实的 AI API
+            // 由于静态网页限制，我们模拟分析结果
+            // 实际使用时替换为真实 API 调用
+            
+            setTimeout(() => {
+                const result = `
+                    <div style="background: #f5f3ff; padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #7c3aed; margin-bottom: 15px;">🌐 ${req.url}</h4>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong>📋 公司核心产品:</strong>
+                            <p style="color: #64748b; margin-top: 5px;">根据网站分析，该公司主要从事机械设备/工业零部件生产和出口，主要产品包括工业马达、泵类设备、自动化控制系统等。</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong>🎯 目标市场:</strong>
+                            <p style="color: #64748b; margin-top: 5px;">目标市场主要集中在北美（美国、加拿大）、欧洲（德国、英国、法国）和东南亚地区。</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong>📦 进口概率分析:</strong>
+                            <p style="color: #64748b; margin-top: 5px;">高概率进口。该公司为生产型企业，具备完善的采购体系。主要从中国进口原材料和零部件。</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong>💡 供应商切入角度:</strong>
+                            <p style="color: #64748b; margin-top: 5px;">1) 提供性价比更高的同类产品替代方案<br>2) 展示在特定零部件上的技术优势<br>3) 提供快速交付和本地化服务支持</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <strong>✉️ 个性化开场白:</strong>
+                            <p style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #7c3aed; margin-top: 5px;">Dear [Name], I noticed that [Company Name] is a leading manufacturer in the industrial equipment sector, and I believe we can help you reduce production costs by 15-20% without compromising quality.</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('aiResultContent').innerHTML = result;
+                
+                // 更新状态
+                requests[idx].status = 'completed';
+                localStorage.setItem('analysis_requests', JSON.stringify(requests));
+                renderAIRequests();
+            }, 3000);
+        }
+        
+        // 删除 AI 请求
+        function deleteAIRequest(idx) {
+            if (confirm('确定要删除这个分析请求吗？')) {
+                const requests = JSON.parse(localStorage.getItem('analysis_requests') || '[]');
+                requests.splice(idx, 1);
+                localStorage.setItem('analysis_requests', JSON.stringify(requests));
+                renderAIRequests();
+            }
+        }
+        
         // 退出登录
         function logout() {
             if (confirm('确定要退出登录吗？')) {
@@ -526,6 +653,7 @@
         
         // 初始化
         renderUsers();
+        renderAIRequests();
     </script>
 </body>
 </html>

@@ -111,8 +111,8 @@
                 <div class="ai-section" id="aiSection">
                     <h3><i class="fas fa-robot"></i> AI 智能分析 <span class="pro-badge">专业版</span></h3>
                     <div id="aiContent">
-                        <button class="url-input-group button ai-btn" onclick="runAIAnalysis()" style="width: 100%; justify-content: center;">
-                            <i class="fas fa-magic"></i> 获取 AI 外贸分析建议
+                        <button class="url-input-group button ai-btn" onclick="requestAIAnalysis()" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-paper-plane"></i> 提交 AI 分析申请
                         </button>
                         <div class="locked-tip" id="lockedTip" style="display: none;">
                             此功能仅对专业版会员开放 <a href="../payment.html?plan=pro">立即升级</a>
@@ -234,7 +234,38 @@
             }, 2000);
         }
         
-        // AI 分析功能
+        // 请求 AI 分析
+        function requestAIAnalysis() {
+            if (userPlan !== 'pro') {
+                alert('此功能仅对专业版会员开放');
+                return;
+            }
+            
+            const url = document.getElementById('websiteUrl').value.trim();
+            if (!url) {
+                alert('请先输入网站 URL');
+                return;
+            }
+            
+            let finalUrl = url;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                finalUrl = 'https://' + url;
+            }
+            
+            // 保存到待分析列表
+            const analysisRequests = JSON.parse(localStorage.getItem('analysis_requests') || '[]');
+            analysisRequests.push({
+                url: finalUrl,
+                user: currentUser.email,
+                date: new Date().toISOString(),
+                status: 'pending'
+            });
+            localStorage.setItem('analysis_requests', JSON.stringify(analysisRequests));
+            
+            alert('✅ AI 分析申请已提交！\n\n您分析的网站：' + finalUrl + '\n\n我会在后台为您分析并生成报告，请稍候。');
+        }
+        
+        // AI 分析功能（旧版模拟）
         function runAIAnalysis() {
             if (userPlan !== 'pro') {
                 alert('此功能仅对专业版会员开放');
