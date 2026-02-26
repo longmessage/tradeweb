@@ -115,18 +115,24 @@
         function updateUserBar() {
             const user = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
             const isLoggedIn = localStorage.getItem('tradeweb_logged_in');
+            const userRole = localStorage.getItem('tradeweb_user_role');
             
             if (isLoggedIn && user.name) {
                 document.getElementById('userName').textContent = user.name;
                 document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
                 
-                const planNames = { free: '免费版', basic: '基础版', pro: '专业版' };
+                // 管理员显示为专业版
+                let userPlan = user.plan || 'free';
+                if (userRole === 'admin') {
+                    userPlan = 'pro'; // 管理员拥有所有权限
+                }
+                
+                const planNames = { free: '免费版', basic: '基础版', pro: '专业版/管理员' };
                 const planEl = document.getElementById('userPlan');
-                const userPlan = user.plan || 'free';
                 planEl.textContent = planNames[userPlan];
                 planEl.className = 'user-plan ' + userPlan;
                 
-                // 根据用户等级显示/隐藏升级横幅
+                // 隐藏升级横幅（管理员和付费用户）
                 if (userPlan !== 'free') {
                     document.getElementById('upgradeBanner').style.display = 'none';
                 }
@@ -135,23 +141,17 @@
                 const loginBtn = document.querySelector('.user-actions a[href="login.html"]');
                 if (loginBtn) loginBtn.style.display = 'none';
                 
-                // 根据用户等级显示工具提示
-                if (userPlan === 'free') {
-                    // 免费版显示提示
-                    showPlanTip('基础版可解锁更多工具');
-                } else if (userPlan === 'basic') {
-                    showPlanTip('专业版可解锁全部高级功能');
+                // 管理员显示提示
+                if (userRole === 'admin') {
+                    showPlanTip('管理员拥有全部权限');
                 }
-            } else {
-                // 未登录显示提示
-                showPlanTip('登录后可使用全部工具');
             }
         }
         
         function showPlanTip(msg) {
             const banner = document.getElementById('upgradeBanner');
             if (banner) {
-                banner.innerHTML = '<h3><i class="fas fa-crown"></i> ' + msg + '</h3><p>升级会员，解锁更多强大工具</p><a href="payment.html" class="membership-btn"><i class="fas fa-user-plus"></i> 立即升级</a>';
+                banner.innerHTML = '<h3><i class="fas fa-shield-alt"></i> ' + msg + '</h3><p>您可以管理所有专业工具</p>';
             }
         }
         
