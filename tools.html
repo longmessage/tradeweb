@@ -113,7 +113,7 @@
     <script>
         // 检查登录状态并更新用户信息
         function updateUserBar() {
-            const user = JSON.parse(localStorage.getItem('tradeweb_user') || '{}');
+            const user = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
             const isLoggedIn = localStorage.getItem('tradeweb_logged_in');
             
             if (isLoggedIn && user.name) {
@@ -122,13 +122,36 @@
                 
                 const planNames = { free: '免费版', basic: '基础版', pro: '专业版' };
                 const planEl = document.getElementById('userPlan');
-                planEl.textContent = planNames[user.plan] || '免费版';
-                planEl.className = 'user-plan ' + (user.plan || 'free');
+                const userPlan = user.plan || 'free';
+                planEl.textContent = planNames[userPlan];
+                planEl.className = 'user-plan ' + userPlan;
                 
-                // 隐藏升级横幅
-                if (user.plan && user.plan !== 'free') {
+                // 根据用户等级显示/隐藏升级横幅
+                if (userPlan !== 'free') {
                     document.getElementById('upgradeBanner').style.display = 'none';
                 }
+                
+                // 隐藏登录按钮
+                const loginBtn = document.querySelector('.user-actions a[href="login.html"]');
+                if (loginBtn) loginBtn.style.display = 'none';
+                
+                // 根据用户等级显示工具提示
+                if (userPlan === 'free') {
+                    // 免费版显示提示
+                    showPlanTip('基础版可解锁更多工具');
+                } else if (userPlan === 'basic') {
+                    showPlanTip('专业版可解锁全部高级功能');
+                }
+            } else {
+                // 未登录显示提示
+                showPlanTip('登录后可使用全部工具');
+            }
+        }
+        
+        function showPlanTip(msg) {
+            const banner = document.getElementById('upgradeBanner');
+            if (banner) {
+                banner.innerHTML = '<h3><i class="fas fa-crown"></i> ' + msg + '</h3><p>升级会员，解锁更多强大工具</p><a href="payment.html" class="membership-btn"><i class="fas fa-user-plus"></i> 立即升级</a>';
             }
         }
         
