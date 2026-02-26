@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员注册 - GlobalTrade Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1e3a5f, #2d5a87); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-container { background: white; border-radius: 24px; overflow: hidden; max-width: 480px; width: 100%; box-shadow: 0 25px 80px rgba(0,0,0,0.3); }
+        .auth-header { background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 40px; text-align: center; color: white; }
+        .auth-header h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .auth-header p { opacity: 0.9; }
+        .auth-body { padding: 40px; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
+        .form-group input { width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 15px; transition: border-color 0.3s; box-sizing: border-box; }
+        .form-group input:focus { outline: none; border-color: #3b82f6; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        .submit-btn:hover { transform: translateY(-2px); }
+        .divider { text-align: center; margin: 24px 0; color: #9ca3af; position: relative; }
+        .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #e5e7eb; }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        .social-login { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .social-btn { padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; transition: background 0.2s; }
+        .social-btn:hover { background: #f9fafb; }
+        .auth-footer { text-align: center; margin-top: 24px; color: #6b7280; }
+        .auth-footer a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+        
+        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+        .plan { padding: 16px 12px; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .plan:hover { border-color: #3b82f6; }
+        .plan.selected { border-color: #3b82f6; background: #eff6ff; }
+        .plan-name { font-weight: 600; color: #374151; margin-bottom: 4px; }
+        .plan-price { font-size: 1.2rem; font-weight: 700; color: #3b82f6; }
+        .plan-price span { font-size: 0.8rem; font-weight: 400; color: #6b7280; }
+        
+        .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; display: none; }
+        .alert.success { background: #d1fae5; color: #065f46; display: block; }
+        .alert.error { background: #fee2e2; color: #991b1b; display: block; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1><i class="fas fa-user-plus"></i> 加入 GlobalTrade Pro</h1>
+            <p>注册会员，免费使用外贸拓客工具</p>
+        </div>
+        
+        <div class="auth-body">
+            <div class="alert" id="alert"></div>
+            
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" id="name" placeholder="您的姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>公司</label>
+                        <input type="text" id="company" placeholder="公司名称" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="password" placeholder="设置密码 (至少6位)" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>选择套餐</label>
+                    <div class="plans">
+                        <div class="plan selected" data-plan="free" onclick="selectPlan(this)">
+                            <div class="plan-name">免费版</div>
+                            <div class="plan-price">¥0<span>/月</span></div>
+                        </div>
+                        <div class="plan" data-plan="basic" onclick="selectPlan(this)">
+                            <div class="plan-name">基础版</div>
+                            <div class="plan-price">¥99<span>/月</span></div>
+                        </div>
+                        <div class="plan" data-plan="pro" onclick="selectPlan(this)">
+                            <div class="plan-name">专业版</div>
+                            <div class="plan-price">¥299<span>/月</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-user-plus"></i> 立即注册
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                已有账号? <a href="login.html">立即登录</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPlan = 'free';
+        
+        function selectPlan(el) {
+            document.querySelectorAll('.plan').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedPlan = el.dataset.plan;
+        }
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (password.length < 6) {
+                showAlert('密码至少需要6位', 'error');
+                return;
+            }
+            
+            // 保存到 localStorage (模拟)
+            const user = { name, email, plan: selectedPlan, registeredAt: new Date().toISOString() };
+            localStorage.setItem('tradeweb_user', JSON.stringify(user));
+            
+            showAlert('注册成功！正在跳转到工具中心...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'tools.html';
+            }, 1500);
+        });
+        
+        function showAlert(msg, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = msg;
+            alert.className = 'alert ' + type;
+        }
+    </script>
+</body>
+</html>

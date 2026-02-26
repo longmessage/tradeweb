@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具中心 - GlobalTrade Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #f5f7fa; }
+        .tools-hero { background: linear-gradient(135deg, #1e3a5f, #2d5a87); padding: 60px 20px; text-align: center; color: white; }
+        .tools-hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .tools-hero p { font-size: 1.2rem; opacity: 0.9; }
+        .tools-container { max-width: 1200px; margin: -40px auto 60px; padding: 0 20px; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .tool-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+        .tool-icon { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+        .tool-icon.analyzer { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+        .tool-icon.email { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .tool-content { padding: 30px; }
+        .tool-content h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .tool-content p { color: #64748b; margin-bottom: 20px; line-height: 1.6; }
+        .tool-features { list-style: none; margin-bottom: 25px; }
+        .tool-features li { padding: 8px 0; color: #374151; display: flex; align-items: center; gap: 10px; }
+        .tool-features li i { color: #10b981; }
+        .tool-btn { display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; }
+        .tool-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.3); }
+        .tool-btn.email-btn { background: linear-gradient(135deg, #10b981, #059669); }
+        .tool-btn.email-btn:hover { box-shadow: 0 8px 20px rgba(16,185,129,0.3); }
+        
+        .membership-banner { background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 20px; padding: 40px; margin-top: 40px; color: white; text-align: center; }
+        .membership-banner h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .membership-banner p { opacity: 0.9; margin-bottom: 20px; }
+        .membership-btn { display: inline-block; padding: 14px 40px; background: white; color: #d97706; text-decoration: none; border-radius: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="tools-hero">
+        <h1><i class="fas fa-tools"></i> 外贸拓客工具中心</h1>
+        <p>注册会员，解锁更多强大工具，助力外贸业务增长</p>
+    </div>
+    
+    <div class="tools-container">
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon analyzer">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="tool-content">
+                    <h3>Website Analyzer</h3>
+                    <p>智能分析竞争对手或潜在客户网站，获取 SEO 评分、性能数据、安全状态</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> 全面 SEO 分析</li>
+                        <li><i class="fas fa-check-circle"></i> 页面性能检测</li>
+                        <li><i class="fas fa-check-circle"></i> 安全漏洞扫描</li>
+                        <li><i class="fas fa-check-circle"></i> 优化建议报告</li>
+                    </ul>
+                    <a href="tools/analyzer.html" class="tool-btn"><i class="fas fa-rocket"></i> 立即使用</a>
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon email">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <div class="tool-content">
+                    <h3>AI Email Generator</h3>
+                    <p>AI 智能生成专业外贸开发邮件，多种模板可选，支持中英文</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> 智能文案生成</li>
+                        <li><i class="fas fa-check-circle"></i> 多种场景模板</li>
+                        <li><i class="fas fa-check-circle"></i> 多语言支持</li>
+                        <li><i class="fas fa-check-circle"></i> 一键复制</li>
+                    </ul>
+                    <a href="tools/email-generator.html" class="tool-btn email-btn"><i class="fas fa-magic"></i> 立即使用</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="membership-banner">
+            <h3><i class="fas fa-crown"></i> 升级会员，畅享全部工具</h3>
+            <p>高级会员可解锁更多拓客工具：LinkedIn 自动拓客、海关数据查询、邮件群发系统...</p>
+            <a href="#register" class="membership-btn"><i class="fas fa-user-plus"></i> 立即注册</a>
+        </div>
+    </div>
+</body>
+</html>
