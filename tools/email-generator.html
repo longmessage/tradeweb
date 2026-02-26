@@ -120,6 +120,13 @@
     </div>
 
     <script>
+        // 检查登录状态
+        const loggedIn = localStorage.getItem('tradeweb_logged_in');
+        if (!loggedIn) {
+            alert('请先登录后使用工具');
+            window.location.href = '../login.html';
+        }
+        
         const emailTemplates = {
             intro: `Dear ${'{recipientName}'},
 

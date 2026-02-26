@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员中心 - GlobalTrade Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #f5f7fa; }
+        .member-header { background: linear-gradient(135deg, #1e3a5f, #2d5a87); padding: 40px 20px; color: white; }
+        .member-container { max-width: 1000px; margin: -40px auto 60px; padding: 0 20px; }
+        .member-info { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+        .member-info .info h2 { font-size: 1.5rem; margin-bottom: 5px; }
+        .member-info .info p { color: #64748b; }
+        .member-badge { padding: 8px 20px; border-radius: 20px; font-weight: 600; }
+        .member-badge.free { background: #e0e7ff; color: #4f46e5; }
+        .member-badge.basic { background: #d1fae5; color: #059669; }
+        .member-badge.pro { background: #fef3c7; color: #d97706; }
+        
+        .plans-section { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .plans-section h3 { font-size: 1.3rem; margin-bottom: 20px; }
+        .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .plan-card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 25px; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .plan-card:hover { border-color: #3b82f6; transform: translateY(-5px); }
+        .plan-card.current { border-color: #3b82f6; background: #eff6ff; }
+        .plan-card .name { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+        .plan-card .price { font-size: 2rem; font-weight: 700; color: #3b82f6; margin-bottom: 15px; }
+        .plan-card .price span { font-size: 0.9rem; color: #6b7280; }
+        .plan-card .features { list-style: none; text-align: left; margin-bottom: 20px; }
+        .plan-card .features li { padding: 8px 0; color: #374151; font-size: 0.9rem; }
+        .plan-card .features li i { color: #10b981; margin-right: 8px; }
+        .plan-btn { display: block; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.2s; }
+        .plan-btn.current { background: #e5e7eb; color: #6b7280; }
+        .plan-btn.upgrade { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .plan-btn.upgrade:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245,158,11,0.4); }
+        
+        .tools-section { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .tools-section h3 { font-size: 1.3rem; margin-bottom: 20px; }
+        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .tool-item { display: flex; align-items: center; padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.2s; }
+        .tool-item.locked { opacity: 0.6; }
+        .tool-item .icon { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-right: 15px; }
+        .tool-item .icon.blue { background: #dbeafe; color: #2563eb; }
+        .tool-item .icon.green { background: #d1fae5; color: #059669; }
+        .tool-item .icon.orange { background: #fef3c7; color: #d97706; }
+        .tool-item .icon.purple { background: #ede9fe; color: #7c3aed; }
+        .tool-item .info { flex: 1; }
+        .tool-item .info h4 { font-size: 1rem; margin-bottom: 5px; }
+        .tool-item .info p { font-size: 0.85rem; color: #64748b; }
+        .tool-item .status { padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .tool-item .status.available { background: #d1fae5; color: #059669; }
+        .tool-item .status.locked { background: #f3f4f6; color: #6b7280; }
+        
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: white; text-decoration: none; margin-bottom: 20px; }
+        .back-btn:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="member-header">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回首页</a>
+        <h1><i class="fas fa-crown"></i> 会员中心</h1>
+        <p>管理您的会员套餐和工具权限</p>
+    </div>
+    
+    <div class="member-container">
+        <div class="member-info">
+            <div class="info">
+                <h2 id="memberName">会员用户</h2>
+                <p id="memberEmail">user@email.com</p>
+            </div>
+            <div class="member-badge free" id="memberBadge">免费版</div>
+        </div>
+        
+        <div class="plans-section">
+            <h3><i class="fas fa-crown"></i> 升级套餐</h3>
+            <div class="plans-grid">
+                <div class="plan-card current" id="planFree">
+                    <div class="name">免费版</div>
+                    <div class="price">¥0<span>/月</span></div>
+                    <ul class="features">
+                        <li><i class="fas fa-check"></i> Website Analyzer</li>
+                        <li><i class="fas fa-check"></i> AI Email Generator</li>
+                        <li><i class="fas fa-times" style="color:#9ca3af"></i> LinkedIn 拓客</li>
+                        <li><i class="fas fa-times" style="color:#9ca3af"></i> 海关数据查询</li>
+                        <li><i class="fas fa-times" style="color:#9ca3af"></i> 邮件群发系统</li>
+                    </ul>
+                    <a href="#" class="plan-btn current">当前套餐</a>
+                </div>
+                
+                <div class="plan-card" id="planBasic">
+                    <div class="name">基础版</div>
+                    <div class="price">¥99<span>/月</span></div>
+                    <ul class="features">
+                        <li><i class="fas fa-check"></i> 全部免费工具</li>
+                        <li><i class="fas fa-check"></i> LinkedIn 拓客</li>
+                        <li><i class="fas fa-check"></i> 海关数据查询</li>
+                        <li><i class="fas fa-times" style="color:#9ca3af"></i> 邮件群发系统</li>
+                        <li><i class="fas fa-times" style="color:#9ca3af"></i> 专属客服</li>
+                    </ul>
+                    <a href="payment.html?plan=basic" class="plan-btn upgrade">立即升级</a>
+                </div>
+                
+                <div class="plan-card" id="planPro">
+                    <div class="name">专业版</div>
+                    <div class="price">¥299<span>/月</span></div>
+                    <ul class="features">
+                        <li><i class="fas fa-check"></i> 全部功能</li>
+                        <li><i class="fas fa-check"></i> 无限次使用</li>
+                        <li><i class="fas fa-check"></i> 邮件群发系统</li>
+                        <li><i class="fas fa-check"></i> 专属客服</li>
+                        <li><i class="fas fa-check"></i> 定制化方案</li>
+                    </ul>
+                    <a href="payment.html?plan=pro" class="plan-btn upgrade">立即升级</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tools-section">
+            <h3><i class="fas fa-tools"></i> 我的工具</h3>
+            <div class="tools-grid">
+                <div class="tool-item" id="toolAnalyzer">
+                    <div class="icon blue"><i class="fas fa-globe"></i></div>
+                    <div class="info">
+                        <h4>Website Analyzer</h4>
+                        <p>网站分析工具</p>
+                    </div>
+                    <div class="status available">可用</div>
+                </div>
+                
+                <div class="tool-item" id="toolEmail">
+                    <div class="icon green"><i class="fas fa-envelope"></i></div>
+                    <div class="info">
+                        <h4>AI Email Generator</h4>
+                        <p>智能邮件生成</p>
+                    </div>
+                    <div class="status available">可用</div>
+                </div>
+                
+                <div class="tool-item locked" id="toolLinkedin">
+                    <div class="icon orange"><i class="fab fa-linkedin"></i></div>
+                    <div class="info">
+                        <h4>LinkedIn 拓客</h4>
+                        <p>自动获客工具</p>
+                    </div>
+                    <div class="status locked">基础版可用</div>
+                </div>
+                
+                <div class="tool-item locked" id="toolCustoms">
+                    <div class="icon purple"><i class="fas fa-database"></i></div>
+                    <div class="info">
+                        <h4>海关数据查询</h4>
+                        <p>全球采购商数据</p>
+                    </div>
+                    <div class="status locked">基础版可用</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        const loggedIn = localStorage.getItem('tradeweb_logged_in');
+        if (!loggedIn) {
+            window.location.href = 'login.html';
+        }
+        
+        // 获取用户信息
+        const user = JSON.parse(localStorage.getItem('tradeweb_user') || '{}');
+        document.getElementById('memberName').textContent = user.name || '会员用户';
+        document.getElementById('memberEmail').textContent = user.email || 'user@email.com';
+        
+        const plan = user.plan || 'free';
+        const badge = document.getElementById('memberBadge');
+        badge.className = 'member-badge ' + plan;
+        badge.textContent = plan === 'free' ? '免费版' : plan === 'basic' ? '基础版' : '专业版';
+        
+        // 更新当前套餐显示
+        document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('current'));
+        document.getElementById('plan' + plan.charAt(0).toUpperCase() + plan.slice(1)).classList.add('current');
+        
+        // 更新工具状态
+        if (plan === 'free') {
+            document.getElementById('toolLinkedin').classList.add('locked');
+            document.getElementById('toolCustoms').classList.add('locked');
+            document.getElementById('toolLinkedin').querySelector('.status').className = 'status locked';
+            document.getElementById('toolLinkedin').querySelector('.status').textContent = '基础版可用';
+            document.getElementById('toolCustoms').querySelector('.status').className = 'status locked';
+            document.getElementById('toolCustoms').querySelector('.status').textContent = '基础版可用';
+        } else if (plan === 'basic') {
+            document.getElementById('toolLinkedin').classList.remove('locked');
+            document.getElementById('toolCustoms').classList.remove('locked');
+            document.getElementById('toolLinkedin').querySelector('.status').className = 'status available';
+            document.getElementById('toolLinkedin').querySelector('.status').textContent = '可用';
+            document.getElementById('toolCustoms').classList.add('locked');
+            document.getElementById('toolCustoms').querySelector('.status').className = 'status locked';
+            document.getElementById('toolCustoms').querySelector('.status').textContent = '专业版可用';
+        } else if (plan === 'pro') {
+            document.getElementById('toolLinkedin').classList.remove('locked');
+            document.getElementById('toolCustoms').classList.remove('locked');
+            document.getElementById('toolLinkedin').querySelector('.status').className = 'status available';
+            document.getElementById('toolLinkedin').querySelector('.status').textContent = '可用';
+            document.getElementById('toolCustoms').querySelector('.status').className = 'status available';
+            document.getElementById('toolCustoms').querySelector('.status').textContent = '可用';
+        }
+    </script>
+</body>
+</html>
