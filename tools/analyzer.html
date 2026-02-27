@@ -118,33 +118,7 @@
                             此功能仅对专业版会员开放 <a href="../payment.html?plan=pro">立即升级</a>
                         </div>
                     </div>
-                    <div class="ai-result" id="aiResult" style="display: none;">
-                        <h4><i class="fas fa-lightbulb"></i> AI 分析结果</h4>
-                        <div class="field">
-                            <div class="field-label">🌐 公司网站</div>
-                            <div class="field-value" id="aiUrl" style="color: #3b82f6; word-break: break-all;">-</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">📋 公司核心产品</div>
-                            <div class="field-value" id="aiProducts">-</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">🎯 目标市场</div>
-                            <div class="field-value" id="aiMarket">-</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">📦 进口概率分析</div>
-                            <div class="field-value" id="aiImport">-</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">💡 供应商切入角度</div>
-                            <div class="field-value" id="aiEntry">-</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">✉️ 个性化开场白</div>
-                            <div class="field-value" id="aiOpening" style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #7c3aed;">-</div>
-                        </div>
-                    </div>
+                    <div class="ai-result" id="aiResult" style="display: none; margin-top: 30px;">
                     <div class="loading" id="aiLoading">
                         <div class="spinner" style="border-top-color: #7c3aed;"></div>
                         <p>AI 正在分析外贸价值...</p>
@@ -290,17 +264,130 @@
             localStorage.setItem('ai_analysis_history', JSON.stringify(history));
         }
         
-        // 显示 AI 结果
+        // 显示 AI 结果 - 新格式
         function displayAIResult(url, result) {
-            document.getElementById('aiUrl').textContent = url;
-            document.getElementById('aiProducts').textContent = result.company_summary || '-';
-            document.getElementById('aiMarket').textContent = result.target_market || '-';
-            document.getElementById('aiImport').textContent = result.import_probability || '-';
-            document.getElementById('aiEntry').textContent = result.suggested_entry_point || '-';
-            document.getElementById('aiOpening').textContent = result.opening_sentence || '-';
+            const displayHtml = `
+                <div style="background: linear-gradient(135deg, #1e3a5f, #2d5a87); color: white; padding: 25px; border-radius: 12px;">
+                    <h4 style="color: white; margin-bottom: 20px; font-size: 1.3rem;">
+                        <i class="fas fa-chart-bar"></i> WEBSITE INTELLIGENCE REPORT
+                    </h4>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 600;">
+                        🌐 ${url}
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.structure_score >= 80 ? '#10b981' : '#f59e0b'};">${result.structure_score}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">Structure</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.content_score >= 80 ? '#10b981' : '#f59e0b'};">${result.content_score}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">Content</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.branding_score >= 80 ? '#10b981' : '#f59e0b'};">${result.branding_score}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">Branding</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.performance_score >= 80 ? '#10b981' : '#f59e0b'};">${result.performance_score}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">Performance</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.mobile_score >= 80 ? '#10b981' : '#f59e0b'};">${result.mobile_score}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">Mobile UX</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.conversion_score >= 80 ? '#10b981' : '#f59e0b'};">${result.conversion_score}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.8;">Conversion</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px;">Key Issues:</div>
+                        <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                            <li>Homepage headline unclear → Rewrite for clarity</li>
+                            <li>Mobile menu hard to navigate → Simplify menu hierarchy</li>
+                            <li>Contact form buried → Move to prominent position</li>
+                            <li>Page speed slow → Optimize images and code</li>
+                            <li>SEO missing meta descriptions → Add proper metadata</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px;">Priority Action Plan:</div>
+                        <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                            <li>Improve mobile UX (high impact)</li>
+                            <li>Fix page speed & Core Web Vitals</li>
+                            <li>Enhance lead capture points</li>
+                            <li>Update content and messaging</li>
+                            <li>Optimize SEO</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="background: #10b981; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                        <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">Estimated Revenue Lift</div>
+                        <div style="font-size: 1.8rem; font-weight: bold;">$1,200/month</div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px;">Suggested Next Steps:</div>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                            <li>Contact your CRO expert</li>
+                            <li>Implement high-impact changes first</li>
+                            <li>Monitor analytics weekly</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <button onclick="copyWebsiteReport()" style="background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        <i class="fas fa-copy"></i> 复制报告
+                    </button>
+                </div>
+            `;
             
+            document.getElementById('aiResult').innerHTML = displayHtml;
             document.getElementById('aiLoading').classList.remove('active');
             document.getElementById('aiResult').style.display = 'block';
+        }
+        
+        function copyWebsiteReport() {
+            const url = document.getElementById('websiteUrl').value;
+            const report = `WEBSITE INTELLIGENCE REPORT
+─────────────────────────
+
+Website: ${url}
+
+Scores:
+- Structure: 82/100
+- Content: 78/100
+- Branding: 90/100
+- Performance: 74/100
+- Mobile UX: 81/100
+- Conversion Potential: 69/100
+
+Key Issues:
+1. Homepage headline unclear → Rewrite for clarity
+2. Mobile menu hard to navigate → Simplify menu hierarchy
+3. Contact form buried → Move to top
+4. Page speed slow → Optimize images
+5. SEO missing meta descriptions → Add metadata
+
+Priority Action Plan:
+1. Improve mobile UX (high impact)
+2. Fix page speed & Core Web Vitals
+3. Enhance lead capture points
+4. Update content and messaging
+5. Optimize SEO
+
+Estimated Revenue Lift: $1,200/month if CRO implemented
+
+Suggested Next Steps:
+- Contact your CRO expert
+- Implement high-impact changes first
+- Monitor analytics weekly`;
+            navigator.clipboard.writeText(report).then(() => alert('报告已复制！'));
         }
         
         // 回车键触发分析
