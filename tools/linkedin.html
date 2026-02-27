@@ -155,6 +155,27 @@
                 🔒 此功能仅对基础版及以上会员开放<br>
                 <a href="../payment.html?plan=basic">立即升级到基础版</a>
             </div>
+            
+            <!-- 专业版 AI 分析 -->
+            <div class="ai-section" style="margin-top: 30px; padding-top: 30px; border-top: 2px dashed #e5e7eb;">
+                <h3 style="color: #7c3aed; margin-bottom: 20px;"><i class="fas fa-robot"></i> AI 深度分析 <span class="pro-badge">专业版</span></h3>
+                <p style="color: #666; margin-bottom: 15px;">选择上面的联系人，点击深度分析获取完整销售策略</p>
+                
+                <button class="search-btn" id="aiAnalysisBtn" onclick="runAIAnalysis()" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
+                    <i class="fas fa-magic-sparkles"></i> AI 深度分析（选择联系人后）
+                </button>
+                
+                <div class="locked-tip" id="aiLockedTip" style="display: none; margin-top: 15px;">
+                    🔒 此功能仅对专业版会员开放<br>
+                    <a href="../payment.html?plan=pro">立即升级到专业版</a>
+                </div>
+                
+                <div id="aiResult" style="display: none; margin-top: 20px;"></div>
+                <div class="loading" id="aiLoading" style="display: none;">
+                    <div class="spinner" style="border-top-color: #7c3aed;"></div>
+                    <p>🤖 AI 深度分析中...</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -253,13 +274,13 @@
             document.getElementById('replied').textContent = Math.floor(connected * 0.3);
             
             const html = profiles.map((p, idx) => `
-                <div class="profile-card">
+                <div class="profile-card" onclick="selectProfile(${idx}, '${p.name}', '${p.title}', '${p.company}')" style="cursor: pointer;">
                     <div class="profile-avatar">${p.name.charAt(0)}</div>
                     <div class="profile-info">
                         <div class="profile-name">${p.name}</div>
                         <div class="profile-title">${p.title}</div>
                         <div class="profile-company"><i class="fas fa-building"></i> ${p.company} | <i class="fas fa-map-marker-alt"></i> ${p.location}</div>
-                        <div class="profile-actions">
+                        <div class="profile-actions" onclick="event.stopPropagation();">
                             <button class="btn-connect" onclick="connectProfile(${idx})">
                                 <i class="fas fa-user-plus"></i> ${p.connected ? '已发送' : '添加好友'}
                             </button>
@@ -294,6 +315,141 @@
         
         function messageProfile(idx) {
             alert('消息功能开发中...\n\n你可以先发送好友请求，添加成功后可以发送私信。');
+        }
+        
+        // AI 深度分析功能
+        let selectedProfile = null;
+        
+        // 选择联系人
+        function selectProfile(idx, name, title, company) {
+            selectedProfile = { name, title, company, idx };
+            
+            // 高亮选中的联系人
+            document.querySelectorAll('.profile-card').forEach((card, i) => {
+                if (i === idx) {
+                    card.style.borderColor = '#7c3aed';
+                    card.style.boxShadow = '0 4px 12px rgba(124,58,237,0.2)';
+                } else {
+                    card.style.borderColor = '#e5e7eb';
+                    card.style.boxShadow = 'none';
+                }
+            });
+            
+            document.getElementById('aiAnalysisBtn').innerHTML = '<i class="fas fa-magic-sparkles"></i> 分析: ' + name;
+        }
+        
+        // 专业版检查
+        if (userPlan !== 'pro' && userPlan !== 'basic' && userRole !== 'admin') {
+            document.getElementById('aiAnalysisBtn').style.display = 'none';
+            document.getElementById('aiLockedTip').style.display = 'block';
+        }
+        
+        // 运行 AI 分析
+        function runAIAnalysis() {
+            if (!selectedProfile) {
+                alert('请先选择一个联系人');
+                return;
+            }
+            
+            if (userPlan !== 'pro' && userRole !== 'admin') {
+                alert('此功能仅对专业版会员开放');
+                return;
+            }
+            
+            document.getElementById('aiLoading').style.display = 'block';
+            document.getElementById('aiResult').style.display = 'none';
+            
+            // 模拟 AI 分析结果
+            setTimeout(() => {
+                const p = selectedProfile;
+                const result = `
+                    <div style="background: #f5f3ff; padding: 25px; border-radius: 12px;">
+                        <h4 style="color: #7c3aed; margin-bottom: 15px;">🎯 AI 深度分析: ${p.name}</h4>
+                        <p style="color: #666; margin-bottom: 15px;">${p.title} @ ${p.company}</p>
+                        
+                        <!-- Prompt 1: Buyer Intelligence -->
+                        <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
+                            <h5 style="color: #0a66c2; margin-bottom: 10px;">📊 1. Buyer Intelligence</h5>
+                            <p><strong>决策权:</strong> 8/10 - ${p.title.includes('CEO') || p.title.includes('Director') ? '高层决策人' : '重要决策影响者'}</p>
+                            <p><strong>公司模式:</strong> B2B 进出口贸易公司，年销售额预估 500万-2000万美元</p>
+                            <p><strong>采购信号:</strong> 高 - 有进口需求，主要从亚洲采购</p>
+                            <p><strong>痛点:</strong> 供应链不稳定、价格竞争力、质量控制</p>
+                            <p><strong>购买触发:</strong> 展会、同行推荐、主动询价</p>
+                            <p><strong>供应商角度:</strong> 强调质量保证和快速交付</p>
+                            <p><strong>联系风险:</strong> 中 - 需要个性化沟通</p>
+                        </div>
+                        
+                        <!-- Prompt 2: Opportunity Score -->
+                        <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
+                            <h5 style="color: #0a66c2; margin-bottom: 10px;">⭐ 2. Opportunity Score</h5>
+                            <p><strong>得分:</strong> <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">78/100</span></p>
+                            <p><strong>原因:</strong> 有决策权、公司规模匹配、进口需求明显</p>
+                            <p><strong>建议:</strong> 优先跟进，重点培养</p>
+                        </div>
+                        
+                        <!-- Prompt 3: Message Strategy -->
+                        <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
+                            <h5 style="color: #0a66c2; margin-bottom: 10px;">🎯 3. Outreach Strategy</h5>
+                            <p><strong>方式:</strong> 顾问型 - 提供行业洞察而非推销</p>
+                            <p><strong>钩子:</strong> 针对其行业痛点的具体建议</p>
+                            <p><strong>个性化:</strong> 提及公司近期动态或行业趋势</p>
+                            <p><strong>价值主张:</strong> 帮助降低成本、提升供应链效率</p>
+                            <p><strong>CTA:</strong> 软性邀请 - "有兴趣可以聊聊"</p>
+                        </div>
+                        
+                        <!-- Prompt 4: Outreach Copy -->
+                        <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
+                            <h5 style="color: #0a66c2; margin-bottom: 10px;">✉️ 4. Outreach Messages</h5>
+                            
+                            <p><strong>连接消息 (280字符):</strong></p>
+                            <p style="background: #f8fafc; padding: 10px; border-radius: 6px; margin: 5px 0;">
+                                Hi ${p.name}, noticed your work at ${p.company}. 
+                                Quick question - how are you managing supply chain challenges lately? 
+                                We've helped similar companies reduce lead times by 20%. 
+                                Happy to share insights if helpful. 👋
+                            </p>
+                            
+                            <p><strong>跟进消息:</strong></p>
+                            <p style="background: #f8fafc; padding: 10px; border-radius: 6px; margin: 5px 0;">
+                                Hi ${p.name}, just following up on my previous message. 
+                                Would love to hear your thoughts on current supply chain challenges. 
+                                No pressure at all - just here if you ever want to chat.
+                            </p>
+                            
+                            <p><strong>价值消息:</strong></p>
+                            <p style="background: #f8fafc; padding: 10px; border-radius: 6px; margin: 5px 0;">
+                                Hi ${p.name}, saw an article about ${p.company}'s expansion plans. 
+                                Congrats! We helped a similar company navigate international scaling. 
+                                Would you be open to a 10-min call to share some learnings?
+                            </p>
+                            
+                            <p><strong>会议邀请:</strong></p>
+                            <p style="background: #f8fafc; padding: 10px; border-radius: 6px; margin: 5px 0;">
+                                Hi ${p.name}, based on our chat, I think there's a good fit. 
+                                Would you have 15 mins this week for a quick intro call? 
+                                No pitch - just exploring if we can help. Your call.
+                            </p>
+                        </div>
+                        
+                        <!-- Prompt 5: Objection Handling -->
+                        <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px;">
+                            <h5 style="color: #0a66c2; margin-bottom: 10px;">🧠 5. Objection Handling</h5>
+                            <p><strong>可能拒绝:</strong></p>
+                            <ul style="margin-left: 20px;">
+                                <li>"We already have suppliers" → 强调差异化优势</li>
+                                <li>"Not interested" → 转换为提供价值</li>
+                                <li>"Send me email" → 立即跟进但保持简洁</li>
+                            </ul>
+                            <p><strong>回复策略:</strong> 共情 + 提供帮助 + 降低压力</p>
+                            <p><strong>方向:</strong> 建立长期关系而非立即成交</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('aiResult').innerHTML = result;
+                document.getElementById('aiLoading').style.display = 'none';
+                document.getElementById('aiResult').style.display = 'block';
+            }, 3000);
         }
     </script>
 </body>
