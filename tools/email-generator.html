@@ -42,6 +42,19 @@
         .template-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .template-tag { padding: 6px 14px; background: #e0f2fe; color: #0284c7; border-radius: 20px; font-size: 13px; cursor: pointer; transition: background 0.2s; }
         .template-tag:hover { background: #bae6fd; }
+        
+        .pro-badge { display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: 10px; }
+        
+        .ai-btn { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+        .ai-section { margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e5e7eb; }
+        .ai-section h4 { color: #7c3aed; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        .locked-tip { background: #fef3c7; border: 1px solid #fcd34d; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; }
+        .locked-tip a { color: #d97706; font-weight: 600; }
+        
+        .result-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .result-tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; background: #f3f4f6; }
+        .result-tab.active { background: #10b981; color: white; }
     </style>
 </head>
 <body style="background: #f5f7fa;">
@@ -101,6 +114,17 @@
             <button class="generate-btn" onclick="generateEmail()">
                 <i class="fas fa-magic"></i> 生成专业邮件
             </button>
+            
+            <!-- AI 专业版功能 -->
+            <div class="ai-section" id="aiSection">
+                <h4><i class="fas fa-robot"></i> AI 智能生成 <span class="pro-badge">专业版</span></h4>
+                <button class="generate-btn ai-btn" id="aiGenBtn" onclick="generateAIMail()">
+                    <i class="fas fa-wand-magic-sparkles"></i> AI 智能生成专业邮件
+                </button>
+                <div class="locked-tip" id="lockedTip" style="display: none;">
+                    此功能仅对专业版会员开放 <a href="../payment.html?plan=pro">立即升级</a>
+                </div>
+            </div>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -253,6 +277,124 @@ GlobalTrade Pro`
             navigator.clipboard.writeText(content).then(() => {
                 alert('邮件内容已复制到剪贴板！');
             });
+        }
+        
+        // 检查会员等级
+        const currentUser = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
+        const userRole = localStorage.getItem('tradeweb_user_role');
+        let userPlan = currentUser.plan || 'free';
+        if (userRole === 'admin') {
+            userPlan = 'pro';
+        }
+        
+        // 根据会员等级显示/隐藏AI功能
+        if (userPlan !== 'pro') {
+            document.getElementById('aiGenBtn').style.display = 'none';
+            document.getElementById('lockedTip').style.display = 'block';
+        }
+        
+        // AI 智能生成专业邮件
+        async function generateAIMail() {
+            if (userPlan !== 'pro') {
+                alert('此功能仅对专业版会员开放');
+                return;
+            }
+            
+            const recipientName = document.getElementById('recipientName').value.trim() || '[Name]';
+            const company = document.getElementById('recipientCompany').value.trim() || '[Company]';
+            const product = document.getElementById('product').value.trim() || '[Product]';
+            const additionalInfo = document.getElementById('additionalInfo').value.trim();
+            
+            if (!company || company === '[Company]') {
+                alert('请输入收件人公司名称');
+                return;
+            }
+            
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('loading').innerHTML = '<div class="spinner"></div><p>🤖 AI 正在智能生成专业邮件...</p>';
+            document.getElementById('result').classList.remove('active');
+            
+            // 使用模拟结果
+            setTimeout(() => {
+                const aiResult = {
+                    mainEmail: `Dear ${recipientName},
+
+I hope this email finds you well.
+
+I came across ${company} and was impressed by your presence in the ${product || 'industry'}. As a professional supplier with 10+ years of experience, I'd like to explore how we might support your business.
+
+We specialize in providing high-quality ${product || 'products'} with competitive pricing and excellent service. Many companies in your industry have benefited from our solutions.
+
+Would you be open to a brief call this week to discuss your specific needs?
+
+Best regards,
+${currentUser.name || 'Sales Team'}`,
+                    
+                    followUp: `Hi ${recipientName},
+
+Just following up on my previous email about ${product || 'our products'}. 
+
+I understand you're busy, so I'll keep this brief. Would you have 10 minutes this week for a quick call?
+
+Looking forward to hearing from you.
+
+Best regards`,
+                    
+                    linkedIn: `Hi ${recipientName}, 
+
+I noticed your work at ${company} and was impressed. We help companies like yours source ${product || 'quality products'} more efficiently.
+
+Would love to connect and share some insights that could benefit your business.
+
+Best regards`
+                };
+                
+                document.getElementById('emailContent').innerHTML = `
+                    <div class="result-tabs">
+                        <div class="result-tab active" onclick="switchEmailTab('main')">主邮件</div>
+                        <div class="result-tab" onclick="switchEmailTab('follow')">跟进邮件</div>
+                        <div class="result-tab" onclick="switchEmailTab('linkedin')">LinkedIn</div>
+                    </div>
+                    <div id="emailMain" class="email-part">${aiResult.mainEmail}</div>
+                    <div id="emailFollow" class="email-part" style="display:none">${aiResult.followUp}</div>
+                    <div id="emailLinkedin" class="email-part" style="display:none">${aiResult.linkedIn}</div>
+                `;
+                
+                // 保存到历史记录
+                saveEmailHistory(company, product, aiResult);
+                
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('result').classList.add('active');
+            }, 2500);
+        }
+        
+        function switchEmailTab(tab) {
+            document.querySelectorAll('.result-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.email-part').forEach(p => p.style.display = 'none');
+            
+            if (tab === 'main') {
+                document.querySelector('.result-tab:nth-child(1)').classList.add('active');
+                document.getElementById('emailMain').style.display = 'block';
+            } else if (tab === 'follow') {
+                document.querySelector('.result-tab:nth-child(2)').classList.add('active');
+                document.getElementById('emailFollow').style.display = 'block';
+            } else if (tab === 'linkedin') {
+                document.querySelector('.result-tab:nth-child(3)').classList.add('active');
+                document.getElementById('emailLinkedin').style.display = 'block';
+            }
+        }
+        
+        function saveEmailHistory(company, product, result) {
+            const history = JSON.parse(localStorage.getItem('email_history') || '[]');
+            history.unshift({
+                company: company,
+                product: product,
+                result: result,
+                user: currentUser.email,
+                date: new Date().toISOString()
+            });
+            if (history.length > 50) history.pop();
+            localStorage.setItem('email_history', JSON.stringify(history));
         }
     </script>
 </body>
