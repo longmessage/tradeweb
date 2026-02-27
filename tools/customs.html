@@ -162,6 +162,22 @@
                 🔒 此功能仅对基础版及以上会员开放<br>
                 <a href="../payment.html?plan=basic" style="color:#d97706;font-weight:600;">立即升级</a>
             </div>
+            
+            <div class="ai-section" style="margin-top:30px;padding-top:30px;border-top:2px dashed #e5e7eb;">
+                <h3 style="color:#7c3aed;margin-bottom:20px;"><i class="fas fa-robot"></i> AI 深度分析 <span class="pro-badge">专业版</span></h3>
+                <button class="search-btn" id="aiAnalysisBtn" onclick="runAIAnalysis()" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">
+                    <i class="fas fa-magic-sparkles"></i> 生成 IMPORTER INTELLIGENCE REPORT
+                </button>
+                <div class="locked-tip" id="aiLockedTip" style="display:none;margin-top:15px;">
+                    🔒 此功能仅对专业版会员开放<br>
+                    <a href="../payment.html?plan=pro" style="color:#d97706;font-weight:600;">立即升级</a>
+                </div>
+                <div id="aiResult" style="display:none;margin-top:20px;"></div>
+                <div class="loading" id="aiLoading" style="display:none;">
+                    <div class="spinner" style="border-top-color:#7c3aed;"></div>
+                    <p>🤖 AI 分析中...</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -179,6 +195,13 @@
             document.querySelector('.search-btn').disabled = true;
         }
         
+        if (userPlan !== 'pro' && userRole !== 'admin') {
+            document.getElementById('aiAnalysisBtn').style.display = 'none';
+            document.getElementById('aiLockedTip').style.display = 'block';
+        }
+        
+        let selectedData = null;
+        
         function searchData() {
             if (userPlan === 'free') { alert('此功能仅对基础版及以上会员开放'); return; }
             
@@ -193,12 +216,11 @@
                     {name:'ABC Import Co',country:'US',amount:'$1.2M',product:'Electronics',activity:'high'},
                     {name:'Tech Solutions Ltd',country:'DE',amount:'$850K',product:'Machinery',activity:'high'},
                     {name:'Global Trading GmbH',country:'UK',amount:'$2.1M',product:'Chemicals',activity:'medium'},
-                    {name:'Pacific Commerce',country:'AU',amount:'$620K',product:'Textiles',activity:'low'},
-                    {name:'Euro Imports SA',country:'FR',amount:'$980K',product:'Auto Parts',activity:'high'},
-                    {name:'Asia Pacific Trade',country:'CN',amount:'$1.5M',product:'Electronics',activity:'high'},
-                    {name:'Nordic Logistics',country:'SE',amount:'$450K',product:'Food',activity:'medium'},
-                    {name:'Mediterranean Co',country:'IT',amount:'$720K',product:'Furniture',activity:'low'}
+                    {name:'Pacific Commerce',country:'AU',amount:'$620K',product:'Textiles',activity:'low'}
                 ];
+                
+                selectedData = mockData[0];
+                document.getElementById('aiAnalysisBtn').innerHTML = '<i class="fas fa-magic-sparkles"></i> 分析: ' + selectedData.name;
                 
                 document.getElementById('totalCount').textContent = mockData.length;
                 document.getElementById('activeCount').textContent = mockData.filter(d=>d.activity==='high').length;
@@ -206,7 +228,7 @@
                 document.getElementById('matchCount').textContent = Math.floor(mockData.length * 0.5);
                 
                 const html = mockData.map(d => `
-                    <tr>
+                    <tr style="cursor:pointer;" onclick="selectData('${d.name}','${d.country}','${d.amount}','${d.product}')">
                         <td><strong>${d.name}</strong></td>
                         <td>${d.country}</td>
                         <td>${d.amount}</td>
@@ -214,11 +236,15 @@
                         <td><span class="badge ${d.activity}">${d.activity==='high'?'高':d.activity==='medium'?'中':'低'}</span></td>
                     </tr>
                 `).join('');
-                
                 document.getElementById('dataTable').innerHTML = html;
                 document.getElementById('loading').classList.remove('active');
                 document.getElementById('results').classList.add('active');
             }, 2000);
+        }
+        
+        function selectData(name, country, amount, product) {
+            selectedData = {name, country, amount, product};
+            document.getElementById('aiAnalysisBtn').innerHTML = '<i class="fas fa-magic-sparkles"></i> 分析: ' + name;
         }
         
         function switchTab(tab) {
@@ -226,6 +252,92 @@
             event.target.classList.add('active');
             document.getElementById('tabList').style.display = tab === 'list' ? 'block' : 'none';
             document.getElementById('tabTrend').style.display = tab === 'trend' ? 'block' : 'none';
+        }
+        
+        function runAIAnalysis() {
+            if (!selectedData) { alert('请先搜索并选择一条数据'); return; }
+            if (userPlan !== 'pro' && userRole !== 'admin') { alert('此功能仅对专业版会员开放'); return; }
+            
+            document.getElementById('aiLoading').style.display = 'block';
+            document.getElementById('aiResult').style.display = 'none';
+            
+            setTimeout(() => {
+                const d = selectedData;
+                const result = `
+                    <div style="background:linear-gradient(135deg,#1e3a5f,#2d5a87);color:white;padding:25px;border-radius:12px;">
+                        <h4 style="color:white;margin-bottom:20px;font-size:1.3rem;"><i class="fas fa-chart-bar"></i> IMPORTER INTELLIGENCE REPORT</h4>
+                        
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                            <div style="background:rgba(255,255,255,0.1);padding:15px;border-radius:8px;text-align:center;">
+                                <div style="font-size:2rem;font-weight:bold;color:#10b981;">High</div>
+                                <div style="font-size:0.85rem;opacity:0.8;">Importer Stability</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.1);padding:15px;border-radius:8px;text-align:center;">
+                                <div style="font-size:2rem;font-weight:bold;color:#10b981;">87/100</div>
+                                <div style="font-size:0.85rem;opacity:0.8;">Opportunity Score</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background:rgba(255,255,255,0.1);padding:15px;border-radius:8px;margin-bottom:15px;">
+                            <div style="font-size:0.85rem;opacity:0.8;margin-bottom:8px;">Purchasing Cycle</div>
+                            <div style="font-weight:600;">Every 60 days</div>
+                        </div>
+                        
+                        <div style="background:rgba(255,255,255,0.1);padding:15px;border-radius:8px;margin-bottom:15px;">
+                            <div style="font-size:0.85rem;opacity:0.8;margin-bottom:8px;">Next Order Window</div>
+                            <div style="font-weight:600;color:#10b981;">3–5 weeks</div>
+                        </div>
+                        
+                        <div style="background:rgba(255,255,255,0.1);padding:15px;border-radius:8px;margin-bottom:15px;">
+                            <div style="font-size:0.85rem;opacity:0.8;margin-bottom:8px;">Supplier Weakness</div>
+                            <div style="font-weight:600;">Heavy reliance on single-region supplier. Limited diversification.</div>
+                        </div>
+                        
+                        <div style="background:rgba(255,255,255,0.1);padding:15px;border-radius:8px;margin-bottom:15px;">
+                            <div style="font-size:0.85rem;opacity:0.8;margin-bottom:8px;">Entry Strategy</div>
+                            <div style="font-weight:600;">Position as supply risk diversification partner. Emphasize alternative sourcing advantages.</div>
+                        </div>
+                        
+                        <div style="background:white;color:#333;padding:15px;border-radius:8px;margin-bottom:15px;">
+                            <div style="font-size:0.85rem;color:#666;margin-bottom:8px;">Suggested Opening Message</div>
+                            <div style="line-height:1.6;">
+                                Hi ${d.name.split(' ')[0]}, noticed your ${d.product} imports from ${d.country === 'US' ? 'Asia' : 'Europe'} have been growing. Quick question - how are you managing supplier diversification risks? We've helped similar companies reduce supply chain vulnerabilities by 30%. Happy to share insights if helpful. 👋
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align:center;margin-top:15px;">
+                        <button onclick="copyReport()" style="background:#10b981;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;">
+                            <i class="fas fa-copy"></i> 复制报告
+                        </button>
+                    </div>
+                `;
+                document.getElementById('aiResult').innerHTML = result;
+                document.getElementById('aiLoading').style.display = 'none';
+                document.getElementById('aiResult').style.display = 'block';
+            }, 2500);
+        }
+        
+        function copyReport() {
+            const d = selectedData;
+            const report = `IMPORTER INTELLIGENCE REPORT
+────────────────────────
+
+Importer Stability: High
+Opportunity Score: 87/100
+
+Purchasing Cycle: Every 60 days
+Next Order Window: 3–5 weeks
+
+Supplier Weakness:
+Heavy reliance on single-region supplier. Limited diversification.
+
+Entry Strategy:
+Position as supply risk diversification partner. Emphasize alternative sourcing advantages.
+
+Suggested Opening Message:
+Hi ${d.name.split(' ')[0]}, noticed your ${d.product} imports have been growing. Quick question - how are you managing supplier diversification risks? We've helped similar companies reduce supply chain vulnerabilities by 30%. Happy to share insights if helpful. 👋`;
+            navigator.clipboard.writeText(report).then(() => alert('报告已复制！'));
         }
     </script>
 </body>
