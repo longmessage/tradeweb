@@ -1571,3 +1571,113 @@ ul {
         min-height: 80vh;
     }
 }
+
+/* 工具页面手机端优化 */
+@media (max-width: 768px) {
+    .tool-container {
+        padding: 15px;
+        margin: 20px auto;
+    }
+    
+    .tool-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .tool-header p {
+        font-size: 0.9rem;
+    }
+    
+    .tool-card {
+        padding: 20px;
+    }
+    
+    .form-row, .search-box {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-btn, .generate-btn {
+        padding: 14px;
+        font-size: 14px;
+    }
+    
+    .stats-grid, .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-card, .stat-item {
+        padding: 15px;
+    }
+    
+    .stat-card .value, .stat-item .value {
+        font-size: 1.2rem;
+    }
+    
+    .data-table {
+        font-size: 12px;
+    }
+    
+    .data-table th, .data-table td {
+        padding: 8px 4px;
+    }
+    
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        margin: 0 auto;
+    }
+    
+    .profile-actions {
+        justify-content: center;
+    }
+    
+    .report-grid, .followup-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .back-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tool-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .stats-grid, .stats-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+    }
+    
+    .form-group input, .form-group select {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .pro-badge {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+    }
+    
+    .report-card, .ai-result {
+        padding: 15px;
+    }
+    
+    .tab-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
