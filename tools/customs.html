@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海关数据查询 - GlobalTrade Pro</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .tool-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .tool-header { text-align: center; margin-bottom: 40px; }
+        .tool-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .tool-header p { color: #666; font-size: 1.1rem; }
+        .tool-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        
+        .pro-badge { display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: 10px; }
+        
+        .search-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #7c3aed; }
+        
+        .search-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        
+        .results-section { display: none; margin-top: 30px; }
+        .results-section.active { display: block; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-card .value { font-size: 1.8rem; font-weight: 700; color: #7c3aed; }
+        .stat-card .label { font-size: 0.85rem; color: #666; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        .data-table th { background: #f8fafc; font-weight: 600; color: #374151; }
+        .data-table tr:hover { background: #f8fafc; }
+        
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+        .badge.high { background: #d1fae5; color: #059669; }
+        .badge.medium { background: #fef3c7; color: #d97706; }
+        .badge.low { background: #f3f4f6; color: #6b7280; }
+        
+        .locked-tip { background: #fef3c7; border: 1px solid #fcd34d; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center; }
+        
+        .loading { text-align: center; padding: 40px; display: none; }
+        .loading.active { display: block; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #e5e7eb; border-top-color: #7c3aed; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 20px; border: none; background: #f3f4f6; border-radius: 8px; cursor: pointer; font-weight: 500; }
+        .tab-btn.active { background: #7c3aed; color: white; }
+        
+        .chart-area { display: flex; align-items: flex-end; gap: 10px; height: 150px; padding: 20px 0; }
+        .chart-bar { flex: 1; background: linear-gradient(to top, #7c3aed, #a78bfa); border-radius: 6px 6px 0 0; position: relative; }
+        .chart-bar .value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-weight: 600; font-size: 0.8rem; }
+        .chart-bar .month { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #666; }
+    </style>
+</head>
+<body style="background: #f5f7fa;">
+    <a href="../tools.html" class="back-btn" style="position:fixed;bottom:80px;right:20px;z-index:9999;background:#3b82f6;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;"><i class="fas fa-home"></i> 返回首页</a>
+    
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-database" style="color: #7c3aed;"></i> 海关数据查询 <span class="pro-badge">基础版</span></h1>
+            <p>查询全球采购商/供应商进出口数据，精准定位目标客户</p>
+        </div>
+        
+        <div class="tool-card">
+            <div class="search-box">
+                <div class="form-group">
+                    <label>公司名称/HS编码</label>
+                    <input type="text" id="searchKeyword" placeholder="输入公司名或海关编码">
+                </div>
+                <div class="form-group">
+                    <label>国家/地区</label>
+                    <select id="searchCountry">
+                        <option value="">全球</option>
+                        <option value="US">美国</option>
+                        <option value="DE">德国</option>
+                        <option value="UK">英国</option>
+                        <option value="FR">法国</option>
+                        <option value="CN">中国</option>
+                        <option value="JP">日本</option>
+                        <option value="AU">澳大利亚</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>数据类型</label>
+                    <select id="searchType">
+                        <option value="import">进口商</option>
+                        <option value="export">出口商</option>
+                        <option value="both">全部</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="search-btn" onclick="searchData()">
+                <i class="fas fa-search"></i> 查询海关数据
+            </button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>正在查询海关数据...</p>
+            </div>
+            
+            <div class="results-section" id="results">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value" id="totalCount">0</div>
+                        <div class="label">数据总量</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="activeCount">0</div>
+                        <div class="label">活跃采购商</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="newCount">0</div>
+                        <div class="label">新增客户</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="matchCount">0</div>
+                        <div class="label">匹配推荐</div>
+                    </div>
+                </div>
+                
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('list')">数据列表</button>
+                    <button class="tab-btn" onclick="switchTab('trend')">趋势分析</button>
+                </div>
+                
+                <div id="tabList">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>公司名称</th>
+                                <th>国家</th>
+                                <th>进出口额</th>
+                                <th>产品类别</th>
+                                <th>活跃度</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTable"></tbody>
+                    </table>
+                </div>
+                
+                <div id="tabTrend" style="display:none;">
+                    <div class="chart-area">
+                        <div class="chart-bar" style="height:60%"><span class="value">$2.1M</span><span class="month">1月</span></div>
+                        <div class="chart-bar" style="height:75%"><span class="value">$2.8M</span><span class="month">2月</span></div>
+                        <div class="chart-bar" style="height:55%"><span class="value">$1.9M</span><span class="month">3月</span></div>
+                        <div class="chart-bar" style="height:85%"><span class="value">$3.2M</span><span class="month">4月</span></div>
+                        <div class="chart-bar" style="height:70%"><span class="value">$2.5M</span><span class="month">5月</span></div>
+                        <div class="chart-bar" style="height:90%"><span class="value">$3.5M</span><span class="month">6月</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="locked-tip" id="lockedTip" style="display:none;">
+                🔒 此功能仅对基础版及以上会员开放<br>
+                <a href="../payment.html?plan=basic" style="color:#d97706;font-weight:600;">立即升级</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loggedIn = localStorage.getItem('tradeweb_logged_in');
+        if (!loggedIn) { alert('请先登录'); window.location.href='../login.html'; }
+        
+        const currentUser = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
+        const userRole = localStorage.getItem('tradeweb_user_role');
+        let userPlan = currentUser.plan || 'free';
+        if (userRole === 'admin') userPlan = 'pro';
+        
+        if (userPlan === 'free') {
+            document.getElementById('lockedTip').style.display = 'block';
+            document.querySelector('.search-btn').disabled = true;
+        }
+        
+        function searchData() {
+            if (userPlan === 'free') { alert('此功能仅对基础版及以上会员开放'); return; }
+            
+            const keyword = document.getElementById('searchKeyword').value.trim();
+            if (!keyword) { alert('请输入搜索关键词'); return; }
+            
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('results').classList.remove('active');
+            
+            setTimeout(() => {
+                const mockData = [
+                    {name:'ABC Import Co',country:'US',amount:'$1.2M',product:'Electronics',activity:'high'},
+                    {name:'Tech Solutions Ltd',country:'DE',amount:'$850K',product:'Machinery',activity:'high'},
+                    {name:'Global Trading GmbH',country:'UK',amount:'$2.1M',product:'Chemicals',activity:'medium'},
+                    {name:'Pacific Commerce',country:'AU',amount:'$620K',product:'Textiles',activity:'low'},
+                    {name:'Euro Imports SA',country:'FR',amount:'$980K',product:'Auto Parts',activity:'high'},
+                    {name:'Asia Pacific Trade',country:'CN',amount:'$1.5M',product:'Electronics',activity:'high'},
+                    {name:'Nordic Logistics',country:'SE',amount:'$450K',product:'Food',activity:'medium'},
+                    {name:'Mediterranean Co',country:'IT',amount:'$720K',product:'Furniture',activity:'low'}
+                ];
+                
+                document.getElementById('totalCount').textContent = mockData.length;
+                document.getElementById('activeCount').textContent = mockData.filter(d=>d.activity==='high').length;
+                document.getElementById('newCount').textContent = Math.floor(mockData.length * 0.3);
+                document.getElementById('matchCount').textContent = Math.floor(mockData.length * 0.5);
+                
+                const html = mockData.map(d => `
+                    <tr>
+                        <td><strong>${d.name}</strong></td>
+                        <td>${d.country}</td>
+                        <td>${d.amount}</td>
+                        <td>${d.product}</td>
+                        <td><span class="badge ${d.activity}">${d.activity==='high'?'高':d.activity==='medium'?'中':'低'}</span></td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('dataTable').innerHTML = html;
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('results').classList.add('active');
+            }, 2000);
+        }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tabList').style.display = tab === 'list' ? 'block' : 'none';
+            document.getElementById('tabTrend').style.display = tab === 'trend' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
