@@ -120,10 +120,10 @@
                         <button class="search-btn ai-btn" id="aiAnalysisBtn" onclick="runAIAnalysis()">
                             <i class="fas fa-magic-sparkles"></i> 生成 WEBSITE INTELLIGENCE REPORT
                         </button>
-                        <div class="locked-tip" id="aiLockedTip" style="display:none;margin-top:15px;">
-                            🔒 此功能仅对专业版会员开放<br>
-                            <a href="../payment.html?plan=pro" style="color:#d97706;font-weight:600;">立即升级</a>
-                        </div>
+                    </div>
+                    <div class="locked-tip" id="aiLockedTip" style="display:none;margin-top:15px;">
+                        🔒 此功能仅对专业版会员开放<br>
+                        <a href="../payment.html?plan=pro" style="color:#d97706;font-weight:600;">立即升级</a>
                     </div>
                     
                     <div class="loading" id="aiLoading" style="display:none;">
@@ -148,6 +148,7 @@
         if (userRole === 'admin') userPlan = 'pro';
         
         if (userPlan !== 'pro' && userRole !== 'admin') {
+            document.getElementById('aiContent').style.display = 'none';
             document.getElementById('aiLockedTip').style.display = 'block';
         }
         
