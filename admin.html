@@ -193,6 +193,9 @@
         <div class="tab-content" id="tab-tools">
             <div class="content-card">
                 <h2><i class="fas fa-tools"></i> 工具管理</h2>
+                <p style="color: #64748b; margin-bottom: 20px;">配置各个工具的启用状态和AI模型设置</p>
+                
+                <!-- 工具列表 -->
                 <div class="tool-item">
                     <div class="info">
                         <div class="icon blue"><i class="fas fa-globe"></i></div>
@@ -201,8 +204,14 @@
                             <div style="font-size: 0.85rem; color: #64748b;">网站分析工具</div>
                         </div>
                     </div>
-                    <div class="status enabled" id="toolAnalyzer">已启用</div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox" id="toolAnalyzerEnabled" checked onchange="toggleTool('analyzer')"> 启用
+                        </label>
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="configureTool('analyzer')">配置</button>
+                    </div>
                 </div>
+                
                 <div class="tool-item">
                     <div class="info">
                         <div class="icon green"><i class="fas fa-envelope"></i></div>
@@ -211,12 +220,76 @@
                             <div style="font-size: 0.85rem; color: #64748b;">智能邮件生成</div>
                         </div>
                     </div>
-                    <div class="status enabled" id="toolEmail">已启用</div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox" id="toolEmailEnabled" checked onchange="toggleTool('email')"> 启用
+                        </label>
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="configureTool('email')">配置</button>
+                    </div>
                 </div>
+                
                 <div class="tool-item">
                     <div class="info">
-                        <div class="icon orange"><i class="fab fa-linkedin"></i></div>
+                        <div class="icon" style="background: linear-gradient(135deg, #0a66c2, #004182); color: white; width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-linkedin"></i></div>
                         <div>
+                            <div style="font-weight: 600;">LinkedIn 拓客</div>
+                            <div style="font-size: 0.85rem; color: #64748b;">自动获客工具</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox" id="toolLinkedinEnabled" checked onchange="toggleTool('linkedin')"> 启用
+                        </label>
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="configureTool('linkedin')">配置</button>
+                    </div>
+                </div>
+                
+                <div class="tool-item">
+                    <div class="info">
+                        <div class="icon" style="background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-database"></i></div>
+                        <div>
+                            <div style="font-weight: 600;">海关数据查询</div>
+                            <div style="font-size: 0.85rem; color: #64748b;">全球采购商数据</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox" id="toolCustomsEnabled" checked onchange="toggleTool('customs')"> 启用
+                        </label>
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="configureTool('customs')">配置</button>
+                    </div>
+                </div>
+                
+                <!-- AI 模型配置 -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-robot"></i> AI 模型全局配置</h3>
+                    
+                    <div class="form-group">
+                        <label>选择 AI 模型</label>
+                        <select id="aiModelSelect" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px;" onchange="saveAISettings()">
+                            <option value="minimax">MiniMax</option>
+                            <option value="openai">OpenAI (GPT)</option>
+                            <option value="anthropic">Anthropic (Claude)</option>
+                            <option value="custom">自定义模型</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>API Key</label>
+                        <input type="password" id="apiKeyInput" placeholder="输入 API Key" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; box-sizing: border-box;" onchange="saveAISettings()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>API Endpoint (自定义)</label>
+                        <input type="text" id="apiEndpointInput" placeholder="https://api.example.com/v1/chat" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; box-sizing: border-box;" onchange="saveAISettings()">
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="saveAISettings()">
+                        <i class="fas fa-save"></i> 保存 AI 配置
+                    </button>
+                </div>
+            </div>
+        </div>
                             <div style="font-weight: 600;">LinkedIn 拓客</div>
                             <div style="font-size: 0.85rem; color: #64748b;">自动获客工具</div>
                         </div>
@@ -808,6 +881,61 @@
             document.getElementById('aiHistoryDetail').style.display = 'block';
         }
         
+        // 工具管理函数
+        function loadToolSettings() {
+            const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
+            
+            // 加载工具启用状态
+            document.getElementById('toolAnalyzerEnabled').checked = settings.analyzer?.enabled !== false;
+            document.getElementById('toolEmailEnabled').checked = settings.email?.enabled !== false;
+            document.getElementById('toolLinkedinEnabled').checked = settings.linkedin?.enabled !== false;
+            document.getElementById('toolCustomsEnabled').checked = settings.customs?.enabled !== false;
+            
+            // 加载 AI 设置
+            document.getElementById('aiModelSelect').value = settings.ai?.model || 'minimax';
+            document.getElementById('apiKeyInput').value = settings.ai?.apiKey || '';
+            document.getElementById('apiEndpointInput').value = settings.ai?.endpoint || '';
+        }
+        
+        function toggleTool(tool) {
+            const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
+            const enabled = document.getElementById('tool' + tool.charAt(0).toUpperCase() + tool.slice(1) + 'Enabled').checked;
+            
+            settings[tool] = { enabled: enabled };
+            localStorage.setItem('tool_settings', JSON.stringify(settings));
+            
+            alert(tool + ' 工具已' + (enabled ? '启用' : '禁用'));
+        }
+        
+        function configureTool(tool) {
+            const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
+            const toolSettings = settings[tool] || {};
+            
+            const config = prompt('配置 ' + tool + ' (JSON格式):', JSON.stringify(toolSettings, null, 2));
+            if (config) {
+                try {
+                    settings[tool] = JSON.parse(config);
+                    localStorage.setItem('tool_settings', JSON.stringify(settings));
+                    alert('配置已保存');
+                } catch (e) {
+                    alert('JSON格式错误');
+                }
+            }
+        }
+        
+        function saveAISettings() {
+            const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
+            
+            settings.ai = {
+                model: document.getElementById('aiModelSelect').value,
+                apiKey: document.getElementById('apiKeyInput').value,
+                endpoint: document.getElementById('apiEndpointInput').value
+            };
+            
+            localStorage.setItem('tool_settings', JSON.stringify(settings));
+            alert('AI 配置已保存');
+        }
+        
         // 退出登录
         function logout() {
             if (confirm('确定要退出登录吗？')) {
@@ -822,6 +950,7 @@
         初始化
         renderAIRequests();
         renderAIHistory();
+        loadToolSettings();
     </script>
 </body>
 </html>
