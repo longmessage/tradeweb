@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Analyzer - GlobalTrade Pro</title>
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css.all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         .tool-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
@@ -14,13 +14,17 @@
         .tool-header p { color: #666; font-size: 1.1rem; }
         .pro-badge { display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: 10px; }
         .tool-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        .url-input-group { display: flex; gap: 10px; margin-bottom: 30px; }
-        .url-input-group input { flex: 1; padding: 16px 20px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; transition: border-color 0.3s; }
-        .url-input-group input:focus { outline: none; border-color: #3b82f6; }
-        .url-input-group button { padding: 16px 32px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .url-input-group button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.3); }
-        .results-section { display: none; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
+        .form-group input { width: 100%; padding: 16px 20px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; box-sizing: border-box; }
+        .form-group input:focus { outline: none; border-color: #3b82f6; }
+        
+        .search-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        
+        .results-section { display: none; margin-top: 30px; }
         .results-section.active { display: block; }
+        
         .score-card { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .score-item { text-align: center; padding: 20px; background: #f8fafc; border-radius: 12px; }
         .score-item .score { font-size: 2.5rem; font-weight: 700; }
@@ -28,54 +32,55 @@
         .score-item .score.middle { color: #f59e0b; }
         .score-item .score.bad { color: #ef4444; }
         .score-item .label { color: #64748b; font-size: 0.9rem; }
-        .result-section { margin-top: 30px; }
-        .result-section h3 { font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .result-section h3 i { color: #3b82f6; }
+        
         .issue-list { list-style: none; }
         .issue-list li { padding: 12px 16px; border-left: 3px solid #e5e7eb; margin-bottom: 10px; background: #fafafa; border-radius: 0 8px 8px 0; }
         .issue-list li.warning { border-color: #f59e0b; }
         .issue-list li.error { border-color: #ef4444; }
         .issue-list li.success { border-color: #10b981; }
         
-        /* AI 分析结果样式 */
-        .ai-section { margin-top: 30px; border-top: 2px dashed #e5e7eb; padding-top: 30px; }
-        .ai-section h3 { color: #7c3aed; }
-        .ai-section h3 i { color: #7c3aed; }
+        .ai-section { margin-top: 30px; padding-top: 30px; border-top: 2px dashed #e5e7eb; }
         .ai-btn { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
-        .ai-btn:hover { box-shadow: 0 8px 20px rgba(124,58,237,0.3); }
-        .ai-result { background: linear-gradient(135deg, #f5f3ff, #ede9fe); padding: 25px; border-radius: 12px; margin-top: 20px; }
-        .ai-result h4 { color: #7c3aed; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .ai-result .field { margin-bottom: 15px; }
-        .ai-result .field-label { font-weight: 600; color: #374151; margin-bottom: 5px; }
-        .ai-result .field-value { color: #64748b; line-height: 1.6; }
-        .ai-result .json-output { background: #1e1b4b; color: #a5b4fc; padding: 20px 8px; font-family: mon; border-radius:ospace; white-space: pre-wrap; margin-top: 15px; }
+        
+        .locked-tip { background: #fef3c7; border: 1px solid #fcd34d; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center; }
         
         .loading { text-align: center; padding: 40px; display: none; }
         .loading.active { display: block; }
         .spinner { width: 50px; height: 50px; border: 4px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .back-btn { position: fixed; bottom: 80px; right: 20px; background: #3b82f6; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; display: flex; align-items: center; gap: 8px; z-index: 100; }
-        .back-btn:hover { background: #2563eb; }
+        .report-card { background: linear-gradient(135deg, #1e3a5f, #2d5a87); color: white; padding: 25px; border-radius: 12px; }
+        .report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .report-stat { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center; }
+        .report-stat .value { font-size: 1.8rem; font-weight: bold; }
+        .report-stat .label { font-size: 0.75rem; opacity: 0.8; }
+        .report-section { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .report-section .title { font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px; }
+        .report-revenue { background: #10b981; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
+        .report-revenue .label { font-size: 0.85rem; opacity: 0.9; }
+        .report-revenue .value { font-size: 1.8rem; font-weight: bold; }
         
-        .locked-tip { background: #fef3c7; border: 1px solid #fcd34d; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
-        .locked-tip a { color: #d97706; font-weight: 600; }
+        .copy-btn { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 15px; }
     </style>
 </head>
 <body style="background: #f5f7fa;">
-    <a href="../tools.html" class="back-btn"><i class="fas fa-home"></i> 返回首页</a>
+    <a href="../tools.html" class="back-btn" style="position:fixed;bottom:80px;right:20px;z-index:9999;background:#3b82f6;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;"><i class="fas fa-home"></i> 返回首页</a>
     
     <div class="tool-container">
         <div class="tool-header">
-            <h1><i class="fas fa-globe" style="color: #3b82f6;"></i> Website Analyzer <span class="pro-badge">专业版</span></h1>
+            <h1><i class="fas fa-globe" style="color: #3b82f6;"></i> Website Analyzer</h1>
             <p>输入任意网站 URL，获取完整的 SEO、性能和安全性分析报告</p>
         </div>
         
         <div class="tool-card">
-            <div class="url-input-group">
-                <input type="url" id="websiteUrl" placeholder="输入网站 URL (例如: https://example.com)">
-                <button onclick="analyzeWebsite()"><i class="fas fa-search"></i> 开始分析</button>
+            <div class="form-group">
+                <label>网站 URL</label>
+                <input type="url" id="websiteUrl" placeholder="输入网站 URL (例如: example.com)">
             </div>
+            
+            <button class="search-btn" onclick="analyzeWebsite()">
+                <i class="fas fa-search"></i> 开始分析
+            </button>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -102,57 +107,48 @@
                     </div>
                 </div>
                 
-                <div class="result-section">
-                    <h3><i class="fas fa-check-circle"></i> 优化建议</h3>
+                <div style="margin-bottom: 20px;">
+                    <h3><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> 优化建议</h3>
                     <ul class="issue-list" id="issues"></ul>
                 </div>
                 
-                <!-- AI 分析功能（专业版/管理员可直接使用） -->
-                <div class="ai-section" id="aiSection">
-                    <h3><i class="fas fa-robot"></i> AI 智能分析 <span class="pro-badge">专业版</span></h3>
+                <!-- 专业版 AI 分析 -->
+                <div class="ai-section">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;"><i class="fas fa-robot"></i> AI 深度分析 <span class="pro-badge">专业版</span></h3>
+                    
                     <div id="aiContent">
-                        <button class="url-input-group button ai-btn" onclick="runAIAnalysis()" style="width: 100%; justify-content: center;">
-                            <i class="fas fa-magic"></i> 立即AI分析
+                        <button class="search-btn ai-btn" id="aiAnalysisBtn" onclick="runAIAnalysis()">
+                            <i class="fas fa-magic-sparkles"></i> 生成 WEBSITE INTELLIGENCE REPORT
                         </button>
-                        <div class="locked-tip" id="lockedTip" style="display: none;">
-                            此功能仅对专业版会员开放 <a href="../payment.html?plan=pro">立即升级</a>
+                        <div class="locked-tip" id="aiLockedTip" style="display:none;margin-top:15px;">
+                            🔒 此功能仅对专业版会员开放<br>
+                            <a href="../payment.html?plan=pro" style="color:#d97706;font-weight:600;">立即升级</a>
                         </div>
                     </div>
-                    <div class="ai-result" id="aiResult" style="display: none; margin-top: 30px;">
-                    <div class="loading" id="aiLoading">
+                    
+                    <div class="loading" id="aiLoading" style="display:none;">
                         <div class="spinner" style="border-top-color: #7c3aed;"></div>
-                        <p>AI 正在分析外贸价值...</p>
+                        <p>🤖 AI 深度分析中...</p>
                     </div>
+                    
+                    <div id="aiResult" style="display:none;margin-top:20px;"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="../js/api.js"></script>
     <script>
-        // 检查登录状态
         const loggedIn = localStorage.getItem('tradeweb_logged_in');
-        if (!loggedIn) {
-            alert('请先登录后使用工具');
-            window.location.href = '../login.html';
-        }
+        if (!loggedIn) { alert('请先登录'); window.location.href='../login.html'; }
         
-        // 检查会员等级
         const currentUser = JSON.parse(localStorage.getItem('tradeweb_current_user') || '{}');
         const userRole = localStorage.getItem('tradeweb_user_role');
-        // 管理员也拥有专业版权限
         let userPlan = currentUser.plan || 'free';
-        if (userRole === 'admin') {
-            userPlan = 'pro';
-        }
+        if (userRole === 'admin') userPlan = 'pro';
         
-        // 如果不是专业版，显示提示
-        if (userPlan !== 'pro') {
-            document.getElementById('aiContent').innerHTML = `
-                <div class="locked-tip">
-                    🔒 此功能仅对专业版会员开放<br>
-                    <a href="../payment.html?plan=pro">立即升级到专业版</a>
-                </div>
-            `;
+        if (userPlan !== 'pro' && userRole !== 'admin') {
+            document.getElementById('aiLockedTip').style.display = 'block';
         }
         
         function getScoreClass(score) {
@@ -163,10 +159,7 @@
 
         function analyzeWebsite() {
             const url = document.getElementById('websiteUrl').value.trim();
-            if (!url) {
-                alert('请输入网站 URL');
-                return;
-            }
+            if (!url) { alert('请输入网站 URL'); return; }
             
             let finalUrl = url;
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
@@ -176,7 +169,6 @@
             document.getElementById('loading').classList.add('active');
             document.getElementById('results').classList.remove('active');
             
-            // 模拟分析过程
             setTimeout(() => {
                 const totalScore = Math.floor(Math.random() * 30) + 65;
                 const seoScore = Math.floor(Math.random() * 40) + 55;
@@ -202,157 +194,130 @@
                     { type: 'error', text: '建议压缩 CSS 和 JavaScript 文件' }
                 ];
                 
-                const issuesHtml = issues.map(issue => 
+                document.getElementById('issues').innerHTML = issues.map(issue => 
                     `<li class="${issue.type}">${issue.text}</li>`
                 ).join('');
-                
-                document.getElementById('issues').innerHTML = issuesHtml;
                 
                 document.getElementById('loading').classList.remove('active');
                 document.getElementById('results').classList.add('active');
             }, 2000);
         }
         
-        // 直接使用 AI 分析（专业版/管理员）
-        async function runAIAnalysis() {
-            if (userPlan !== 'pro') {
+        function runAIAnalysis() {
+            if (userPlan !== 'pro' && userRole !== 'admin') {
                 alert('此功能仅对专业版会员开放');
                 return;
             }
             
             const url = document.getElementById('websiteUrl').value.trim();
-            if (!url) {
-                alert('请先输入网站 URL 并进行分析');
-                return;
-            }
+            if (!url) { alert('请先输入网站 URL'); return; }
             
             let finalUrl = url;
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
                 finalUrl = 'https://' + url;
             }
             
-            document.getElementById('aiLoading').classList.add('active');
+            document.getElementById('aiLoading').style.display = 'block';
             document.getElementById('aiResult').style.display = 'none';
             
-            // 使用模拟结果（API需要后端支持）
             setTimeout(() => {
-                const results = {
-                    company_summary: "根据网站分析，该公司主要从事机械设备/工业零部件生产和出口，主要产品包括工业马达、泵类设备、自动化控制系统等。产品定位于中高端工业市场。",
-                    target_market: "目标市场主要集中在北美（美国、加拿大）、欧洲（德国、英国、法国）和东南亚地区。",
-                    import_probability: "高概率进口 - 该公司为生产型企业，具备完善的采购体系，主要从中国进口原材料和零部件，有稳定的供应链需求。",
-                    suggested_entry_point: "1) 提供性价比更高的同类产品替代方案\n2) 展示在特定零部件上的技术优势\n3) 提供快速交付和本地化服务支持\n4) 展示成功合作案例",
-                    opening_sentence: "Dear [Name], I noticed that [Company Name] is a leading manufacturer in the industrial equipment sector, and I believe we can help you reduce production costs by 15-20% without compromising quality."
+                const result = {
+                    structure_score: 82,
+                    content_score: 78,
+                    branding_score: 90,
+                    performance_score: 74,
+                    mobile_score: 81,
+                    conversion_score: 69
                 };
                 
-                displayAIResult(finalUrl, results);
-                saveToHistory(finalUrl, results);
-                document.getElementById('aiLoading').classList.remove('active');
-            }, 3000);
-        }
-        
-        // 保存到历史记录（后台可查看）
-        function saveToHistory(url, result) {
-            const history = JSON.parse(localStorage.getItem('ai_analysis_history') || '[]');
-            history.unshift({
-                url: url,
-                result: result,
-                user: currentUser.email,
-                date: new Date().toISOString()
-            });
-            // 只保留最近50条
-            if (history.length > 50) history.pop();
-            localStorage.setItem('ai_analysis_history', JSON.stringify(history));
-        }
-        
-        // 显示 AI 结果 - 新格式
-        function displayAIResult(url, result) {
-            const displayHtml = `
-                <div style="background: linear-gradient(135deg, #1e3a5f, #2d5a87); color: white; padding: 25px; border-radius: 12px;">
-                    <h4 style="color: white; margin-bottom: 20px; font-size: 1.3rem;">
-                        <i class="fas fa-chart-bar"></i> WEBSITE INTELLIGENCE REPORT
-                    </h4>
-                    
-                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 600;">
-                        🌐 ${url}
+                const displayHtml = `
+                    <div class="report-card">
+                        <h4 style="color: white; margin-bottom: 20px; font-size: 1.3rem;">
+                            <i class="fas fa-chart-bar"></i> WEBSITE INTELLIGENCE REPORT
+                        </h4>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 600;">
+                            🌐 ${finalUrl}
+                        </div>
+                        
+                        <div class="report-grid">
+                            <div class="report-stat">
+                                <div class="value" style="color: ${result.structure_score >= 80 ? '#10b981' : '#f59e0b'};">${result.structure_score}</div>
+                                <div class="label">Structure</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="value" style="color: ${result.content_score >= 80 ? '#10b981' : '#f59e0b'};">${result.content_score}</div>
+                                <div class="label">Content</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="value" style="color: ${result.branding_score >= 80 ? '#10b981' : '#f59e0b'};">${result.branding_score}</div>
+                                <div class="label">Branding</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="value" style="color: ${result.performance_score >= 80 ? '#10b981' : '#f59e0b'};">${result.performance_score}</div>
+                                <div class="label">Performance</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="value" style="color: ${result.mobile_score >= 80 ? '#10b981' : '#f59e0b'};">${result.mobile_score}</div>
+                                <div class="label">Mobile UX</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="value" style="color: ${result.conversion_score >= 80 ? '#10b981' : '#f59e0b'};">${result.conversion_score}</div>
+                                <div class="label">Conversion</div>
+                            </div>
+                        </div>
+                        
+                        <div class="report-section">
+                            <div class="title">Key Issues:</div>
+                            <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                                <li>Homepage headline unclear → Rewrite for clarity</li>
+                                <li>Mobile menu hard to navigate → Simplify menu hierarchy</li>
+                                <li>Contact form buried → Move to prominent position</li>
+                                <li>Page speed slow → Optimize images and code</li>
+                                <li>SEO missing meta descriptions → Add proper metadata</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="report-section">
+                            <div class="title">Priority Action Plan:</div>
+                            <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                                <li>Improve mobile UX (high impact)</li>
+                                <li>Fix page speed & Core Web Vitals</li>
+                                <li>Enhance lead capture points</li>
+                                <li>Update content and messaging</li>
+                                <li>Optimize SEO</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="report-revenue">
+                            <div class="label">Estimated Revenue Lift</div>
+                            <div class="value">$1,200/month</div>
+                        </div>
+                        
+                        <div class="report-section">
+                            <div class="title">Suggested Next Steps:</div>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                                <li>Contact your CRO expert</li>
+                                <li>Implement high-impact changes first</li>
+                                <li>Monitor analytics weekly</li>
+                            </ul>
+                        </div>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.structure_score >= 80 ? '#10b981' : '#f59e0b'};">${result.structure_score}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.8;">Structure</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.content_score >= 80 ? '#10b981' : '#f59e0b'};">${result.content_score}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.8;">Content</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.branding_score >= 80 ? '#10b981' : '#f59e0b'};">${result.branding_score}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.8;">Branding</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.performance_score >= 80 ? '#10b981' : '#f59e0b'};">${result.performance_score}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.8;">Performance</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.mobile_score >= 80 ? '#10b981' : '#f59e0b'};">${result.mobile_score}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.8;">Mobile UX</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 1.8rem; font-weight: bold; color: ${result.conversion_score >= 80 ? '#10b981' : '#f59e0b'};">${result.conversion_score}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.8;">Conversion</div>
-                        </div>
+                    <div style="text-align: center;">
+                        <button class="copy-btn" onclick="copyReport()">
+                            <i class="fas fa-copy"></i> 复制报告
+                        </button>
                     </div>
-                    
-                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px;">Key Issues:</div>
-                        <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
-                            <li>Homepage headline unclear → Rewrite for clarity</li>
-                            <li>Mobile menu hard to navigate → Simplify menu hierarchy</li>
-                            <li>Contact form buried → Move to prominent position</li>
-                            <li>Page speed slow → Optimize images and code</li>
-                            <li>SEO missing meta descriptions → Add proper metadata</li>
-                        </ol>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px;">Priority Action Plan:</div>
-                        <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
-                            <li>Improve mobile UX (high impact)</li>
-                            <li>Fix page speed & Core Web Vitals</li>
-                            <li>Enhance lead capture points</li>
-                            <li>Update content and messaging</li>
-                            <li>Optimize SEO</li>
-                        </ol>
-                    </div>
-                    
-                    <div style="background: #10b981; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
-                        <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">Estimated Revenue Lift</div>
-                        <div style="font-size: 1.8rem; font-weight: bold;">$1,200/month</div>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
-                        <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 8px;">Suggested Next Steps:</div>
-                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
-                            <li>Contact your CRO expert</li>
-                            <li>Implement high-impact changes first</li>
-                            <li>Monitor analytics weekly</li>
-                        </ul>
-                    </div>
-                </div>
+                `;
                 
-                <div style="text-align: center; margin-top: 15px;">
-                    <button onclick="copyWebsiteReport()" style="background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                        <i class="fas fa-copy"></i> 复制报告
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('aiResult').innerHTML = displayHtml;
-            document.getElementById('aiLoading').classList.remove('active');
-            document.getElementById('aiResult').style.display = 'block';
+                document.getElementById('aiResult').innerHTML = displayHtml;
+                document.getElementById('aiLoading').style.display = 'none';
+                document.getElementById('aiResult').style.display = 'block';
+            }, 2500);
         }
         
-        function copyWebsiteReport() {
+        function copyReport() {
             const url = document.getElementById('websiteUrl').value;
             const report = `WEBSITE INTELLIGENCE REPORT
 ─────────────────────────
@@ -390,7 +355,6 @@ Suggested Next Steps:
             navigator.clipboard.writeText(report).then(() => alert('报告已复制！'));
         }
         
-        // 回车键触发分析
         document.getElementById('websiteUrl').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') analyzeWebsite();
         });
