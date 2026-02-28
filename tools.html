@@ -187,7 +187,43 @@
             }
         }
         
+        // 根据后台配置显示/隐藏工具
+        function loadToolSettings() {
+            const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
+            
+            // Website Analyzer
+            if (settings.analyzer?.enabled === false) {
+                const card = document.querySelector('.tool-card');
+                if (card) card.style.display = 'none';
+            }
+            
+            // AI Email Generator
+            if (settings.email?.enabled === false) {
+                const cards = document.querySelectorAll('.tool-card');
+                if (cards[1]) cards[1].style.display = 'none';
+            }
+            
+            // LinkedIn
+            if (settings.linkedin?.enabled === false) {
+                const cards = document.querySelectorAll('.tool-card');
+                if (cards[2]) cards[2].style.display = 'none';
+            }
+            
+            // 海关数据
+            if (settings.customs?.enabled === false) {
+                const cards = document.querySelectorAll('.tool-card');
+                if (cards[3]) cards[3].style.display = 'none';
+            }
+            
+            // 如果所有工具都禁用
+            const allDisabled = !settings.analyzer?.enabled && !settings.email?.enabled && !settings.linkedin?.enabled && !settings.customs?.enabled;
+            if (allDisabled || Object.keys(settings).length === 0) {
+                // 默认显示所有工具
+            }
+        }
+        
         updateUserBar();
+        loadToolSettings();
     </script>
 </body>
 </html>
