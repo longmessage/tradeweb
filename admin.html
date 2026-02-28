@@ -886,25 +886,51 @@
             const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
             
             // 加载工具启用状态
-            document.getElementById('toolAnalyzerEnabled').checked = settings.analyzer?.enabled !== false;
-            document.getElementById('toolEmailEnabled').checked = settings.email?.enabled !== false;
-            document.getElementById('toolLinkedinEnabled').checked = settings.linkedin?.enabled !== false;
-            document.getElementById('toolCustomsEnabled').checked = settings.customs?.enabled !== false;
+            if (document.getElementById('toolAnalyzerEnabled')) {
+                document.getElementById('toolAnalyzerEnabled').checked = settings.analyzer?.enabled !== false;
+            }
+            if (document.getElementById('toolEmailEnabled')) {
+                document.getElementById('toolEmailEnabled').checked = settings.email?.enabled !== false;
+            }
+            if (document.getElementById('toolLinkedinEnabled')) {
+                document.getElementById('toolLinkedinEnabled').checked = settings.linkedin?.enabled !== false;
+            }
+            if (document.getElementById('toolCustomsEnabled')) {
+                document.getElementById('toolCustomsEnabled').checked = settings.customs?.enabled !== false;
+            }
             
             // 加载 AI 设置
-            document.getElementById('aiModelSelect').value = settings.ai?.model || 'minimax';
-            document.getElementById('apiKeyInput').value = settings.ai?.apiKey || '';
-            document.getElementById('apiEndpointInput').value = settings.ai?.endpoint || '';
+            if (document.getElementById('aiModelSelect')) {
+                document.getElementById('aiModelSelect').value = settings.ai?.model || 'minimax';
+            }
+            if (document.getElementById('apiKeyInput')) {
+                document.getElementById('apiKeyInput').value = settings.ai?.apiKey || '';
+            }
+            if (document.getElementById('apiEndpointInput')) {
+                document.getElementById('apiEndpointInput').value = settings.ai?.endpoint || '';
+            }
         }
         
         function toggleTool(tool) {
             const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
-            const enabled = document.getElementById('tool' + tool.charAt(0).toUpperCase() + tool.slice(1) + 'Enabled').checked;
             
-            settings[tool] = { enabled: enabled };
+            let elementId = 'tool' + tool.charAt(0).toUpperCase() + tool.slice(1) + 'Enabled';
+            // 特殊情况
+            if (tool === 'customs') elementId = 'toolCustomsEnabled';
+            if (tool === 'analyzer') elementId = 'toolAnalyzerEnabled';
+            if (tool === 'email') elementId = 'toolEmailEnabled';
+            if (tool === 'linkedin') elementId = 'toolLinkedinEnabled';
+            
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            const enabled = el.checked;
+            settings[tool] = settings[tool] || {};
+            settings[tool].enabled = enabled;
+            
             localStorage.setItem('tool_settings', JSON.stringify(settings));
             
-            alert(tool + ' 工具已' + (enabled ? '启用' : '禁用'));
+            alert((tool.charAt(0).toUpperCase() + tool.slice(1)) + ' 工具已' + (enabled ? '启用' : '禁用'));
         }
         
         function configureTool(tool) {
@@ -927,9 +953,9 @@
             const settings = JSON.parse(localStorage.getItem('tool_settings') || '{}');
             
             settings.ai = {
-                model: document.getElementById('aiModelSelect').value,
-                apiKey: document.getElementById('apiKeyInput').value,
-                endpoint: document.getElementById('apiEndpointInput').value
+                model: document.getElementById('aiModelSelect')?.value || 'minimax',
+                apiKey: document.getElementById('apiKeyInput')?.value || '',
+                endpoint: document.getElementById('apiEndpointInput')?.value || ''
             };
             
             localStorage.setItem('tool_settings', JSON.stringify(settings));
