@@ -750,7 +750,7 @@
             const navAuth = document.getElementById('navAuth');
             
             if (loggedIn && currentUser.name) {
-                navAuth.innerHTML = '<a href="member.html" style="color: #3b82f6;"><i class="fas fa-user-circle"></i> ' + currentUser.name + '</a>';
+                navAuth.innerHTML = '<a href="member.html" style="color: #3b82f6;"><i class="fas fa-user-circle"></i> ' + currentUser.name + '</a> <a href="#" onclick="logout()" style="color: #ef4444; margin-left: 10px;" title="退出登录"><i class="fas fa-sign-out-alt"></i></a>';
                 
                 // 登录后修改"免费试用"按钮为工具中心
                 const tryFreeBtn = document.querySelector('.header-actions .btn');
@@ -758,6 +758,15 @@
                     tryFreeBtn.href = 'tools.html';
                     tryFreeBtn.innerHTML = '<i class="fas fa-tools"></i> 我的工具';
                 }
+            }
+        }
+        
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('tradeweb_logged_in');
+                localStorage.removeItem('tradeweb_user_role');
+                localStorage.removeItem('tradeweb_current_user');
+                window.location.href = 'index.html';
             }
         }
     </script>
